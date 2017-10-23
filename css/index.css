@@ -24,91 +24,40 @@ input{border:1px solid #e5e5e5;outline:none;}
 html,body { height: 100%; margin: 0; padding: 0; font-size:0; }
 div { border: 1px solid #ccc; font-size: 14px; }
 
-#preview {
-	width: 500px;
-	height: 100%;
-	float: left;
-	display: inline-block;
-}
-#preview>ul {
-	width: 80%;
-	min-height: 50%;
-	margin: 10px auto;
-	overflow: auto;
-}
+/*左侧预览 start*/
+#preview { width: 500px; height: 100%; float: left; display: inline-block; }
+#preview>ul { width: 80%; min-height: 50%; margin: 10px auto; overflow: auto; }
+#preview #mod .frame { width: 100%; border: none; }
+.preview_list .content { border: 1px dotted #ccc; }
+.preview_list #mod { position: relative; margin: 10px 20px; border: 1px dotted transparent; outline-color: red; }
+.preview_list #mod:hover { border: 1px dotted red; }
+.preview_list .delete { display: none; position: absolute; top: 5px; right: -10px; width: 15px; height: 15px; background-image: url('../img/mod_add.png'); background-size: 100% 100%; cursor: pointer; }
+.preview_list .edit { display: none; position: absolute; top: 25px; right: -10px; width: 15px; height: 15px; background-image: url('../img/mod_add.png'); background-size: 100% 100%; cursor: pointer; }
+.preview_list #mod:hover .delete, .preview_list #mod:hover .edit { display: block; }
+/*左侧预览 end*/
 
-#widget {
-	width: 200px;
-	height: 100%;
-	float: left;
-	margin-left: 50px;
-	display: inline-block;
-	outline: none;
-	background-color: #eee;
-}
-#widget>ul {
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-}
+
+/*右侧模板 start*/
+#widget { width: 200px; height: 100%; float: left; margin-left: 50px; display: inline-block; outline: none; background-color: #eee; }
+#widget>ul { width: 100%; height: 100%; overflow: auto; }
 /*---------------------------*/
-
-.widget_list #mod {
-	position: relative;
-	margin: 20px 10px;
-}
-#mod .frame {
-	width: 180px;
-	overflow: hidden;
-}
-.mod_add {
-	display: block;
-	position: absolute;
-	top: -5px;
-	right: -5px;
-	width: 15px;
-	height: 15px;
-	background-image: url('../img/mod_add.png');
-	background-size: 100% 100%;
-	cursor: pointer;
-}
+.widget_list #mod { position: relative; margin: 20px 10px; }
+#mod .frame { width: 180px; overflow: hidden; }
+.mod_add { display: block; position: absolute; top: -5px; right: -5px; width: 15px; height: 15px; background-image: url('../img/mod_add.png'); background-size: 100% 100%; cursor: pointer; }
 /*---------------------------*/
-
 /*模版分类名*/
-.mod_name {
-	margin: 10px 10px;
-}
+.mod_name { margin: 10px 10px; }
 /*text标题模版*/
-.mod_text_a .frame {
-	padding: 5px;
-	height: 40px;
-}
+.mod_text_a .frame { padding: 5px; height: 40px; }
 /*text内容模版*/
-.mod_text_b .frame {
-	padding: 5px;
-	height: 70px;
-}
-.mod_text_b .content {
-	height: 60px;
-	padding: 5px;
-}
+.mod_text_b .frame { padding: 5px; height: 70px; }
+.mod_text_b .content { height: 60px; padding: 5px; }
 /*text文本模版*/
-.mod_text_c .frame {
-	padding: 5px;
-	height: 100px;
-}
-.mod_text_c .title {
-	height: 30px;
-}
-.mod_text_c .content {
-	height: 60px;
-	padding: 5px;
-}
+.mod_text_c .frame { padding: 5px; height: 100px; }
+.mod_text_c .title { height: 30px; }
+.mod_text_c .content { height: 60px; padding: 5px; }
 /*image图片模板*/
-.mod_img_a .frame {
-	height: 110px;
-}
-.mod_img_a .img {
-	width: 100%;
-	height: 100%;
-}
+/*.mod_img_a .frame { height: 110px; }*/
+.mod_img_a .img { width: 100%; }
+/*右侧模板 end*/
+
