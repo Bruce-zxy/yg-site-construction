@@ -1,19 +1,19 @@
-var data;
-
-// 展示栏拖拽效果
-function saveOrder() {
-	data = [];
-	console.log($('.preview_list').children().map(function(i, item, arr) {
-		data.push($(item).clone());
-	}));
-
-};
-// $("#preview .preview_list").dragsort({
-// 	dragSelector: "div",
-// 	dragBetween: false,
-// 	dragEnd: saveOrder,
-// 	placeHolderTemplate: '<li id="mod"><div class="frame"></div></li>'
-// });
+// HTML编码
+function HTMLEncode(html) {
+    var temp = document.createElement("div");
+    (temp.textContent != null) ? (temp.textContent = html) : (temp.innerText = html);
+    var output = temp.innerHTML;
+    temp = null;
+    return output;
+}
+// HTML解码
+function HTMLDecode(text) { 
+    var temp = document.createElement("div"); 
+    temp.innerHTML = text; 
+    var output = temp.innerText || temp.textContent; 
+    temp = null; 
+    return output; 
+}
 
 // 编辑栏增加DOM元素
 $('.mod_add').click(function () {
@@ -21,41 +21,50 @@ $('.mod_add').click(function () {
 	$('.preview_list .mod_add').remove();
 	$('.preview_list .delete').click(function () {
 		$(this).parent().remove()
-		saveOrder();
 	})
 	$('.preview_list .edit').click(function () {
 		$(this).prev().prev().attr("contenteditable", "true");
-		saveOrder();
 	})
-	saveOrder();
 })
 
-$('#preview #mod').click(function() {
-	console.log($('body'));
-})
+// 点击mod进行编辑
+// $('#preview #mod').click(function() {
+// 	console.log($('body'));
+// })
 
 // 后台发送保存数据
 $('.test').click(function() {
-	console.log(data);
+	var content = $("#preview").clone();
+	content.find('.edit').remove();
+	content.find('.delete').remove();
+    var formatSrc = $.htmlClean(content.html(), {
+        format: true,
+        allowedAttributes: [
+            ["id"],
+            ["class"],
+            ["src"],
+            ["alt"]
+        ]
+    });
 	var address = "http://localhost/test.php";
 	var datas = {
 		name: 'mod01',
-		content: data
+		content: formatSrc
 	}
-	$('.output').html(data);
-	// $.ajax({
-	// 	type: "post",
-	// 	url: address,
-	// 	data: datas,
-	// 	success: function(json){
-	// 		console.log(JSON.stringify(json));
-	// 		$('.output').html(JSON.stringify(json))
-	// 	},
-	// 	error: function(){
-	// 		alert('fail');
-	// 	}
-	// });
+	$.ajax({
+		type: "post",
+		url: address,
+		data: datas,
+		success: function(data){
+			$('.output').html(data);
+		},
+		error: function(){
+			alert('异步请求失败！');
+		}
+	});
 })
+
+
 
 
 
