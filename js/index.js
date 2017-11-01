@@ -46,6 +46,7 @@ $('.test').click(function() {
             ["alt"]
         ]
     });
+    console.log(formatSrc);
 	var address = "http://localhost/test.php";
 	var datas = {
 		name: 'mod01',
