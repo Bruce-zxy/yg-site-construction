@@ -3,6 +3,10 @@
 $.base64.utf8encode = true;
 $.base64.utf8decode = true;
 
+$('.dropdown-toggle').next().find('a').click(function () {
+    $('.dropdown-toggle').html(this.innerHTML)
+});
+
 // HTML编码
 function HTMLEncode(html) {
     var temp = document.createElement("div");
@@ -32,11 +36,6 @@ $('.mod_add').click(function() {
     })
 })
 
-// 点击mod进行编辑
-// $('#preview #mod').click(function() {
-// 	console.log($('body'));
-// })
-
 // 后台发送保存数据
 $('.test').click(function() {
     var content = $("#preview").clone();
@@ -51,8 +50,9 @@ $('.test').click(function() {
             ["alt"]
         ]
     });
+    console.log(formatSrc)
     console.log($.base64.btoa(formatSrc));
-    var address = "http://localhost/test.php";
+    var address = "http://localhost/yg-site-construction/test.php";
     var datas = {
         name: 'mod01',
         content: $.base64.btoa(formatSrc)
@@ -62,10 +62,15 @@ $('.test').click(function() {
         url: address,
         data: datas,
         success: function(data) {
-            $('.output').html($.base64.atob(data));
+            data = JSON.parse(data);
+            if(typeof(data) !== 'object') {
+                alert('服务器返回参数错误！')
+            } else {
+                data.content ? $('.output').html(data.content) : alert(data.error);
+            }
         },
-        error: function() {
-            alert('异步请求失败！');
+        error: function(a, b) {
+            alert('向服务器请求数据失败！');
         }
     });
 })
