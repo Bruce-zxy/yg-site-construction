@@ -1,3 +1,8 @@
+!window.btoa ? window.btoa = $.base64.btoa : null
+!window.atob ? window.atob = $.base64.atob : null
+$.base64.utf8encode = true;
+$.base64.utf8decode = true;
+
 // HTML编码
 function HTMLEncode(html) {
     var temp = document.createElement("div");
@@ -46,18 +51,18 @@ $('.test').click(function() {
             ["alt"]
         ]
     });
-    console.log(formatSrc);
+    console.log($.base64.btoa(formatSrc));
     var address = "http://localhost/test.php";
     var datas = {
         name: 'mod01',
-        content: formatSrc
+        content: $.base64.btoa(formatSrc)
     }
     $.ajax({
         type: "post",
         url: address,
         data: datas,
         success: function(data) {
-            $('.output').html(data);
+            $('.output').html($.base64.atob(data));
         },
         error: function() {
             alert('异步请求失败！');

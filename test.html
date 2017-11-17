@@ -38,7 +38,7 @@ function appendWay() {
 	</ul>`;
 	var html = '';
 
-	for(var i = 0; i < 100; i++) {
+	for(var i = 0; i < 1000; i++) {
 		html += content;
 	}
 
@@ -63,7 +63,7 @@ function innerHTMLWay() {
 	</ul>`;
 	var html = '';
 
-	for(var i = 0; i < 100; i++) {
+	for(var i = 0; i < 1000; i++) {
 		html += content;
 	}
 
@@ -79,7 +79,7 @@ function innerHTMLWay() {
 function createDF() {
 	var startT = new Date();
 	var docfrag = document.createDocumentFragment()
-	for (var i = 0; i < 100; i++) {
+	for (var i = 0; i < 1000; i++) {
 		var ul = document.createElement('ul');
 		ul.className = "preview_list";
 		var li = document.createElement('li');
@@ -117,7 +117,7 @@ function createDF2() {
 				</div>
 			</div>
 		</li>`;
-	for(var i = 0; i < 100; i++) {
+	for(var i = 0; i < 1000; i++) {
 		var ul = document.createElement('ul');
 		ul.className = "preview_list";
 		ul.innerHTML = content;
