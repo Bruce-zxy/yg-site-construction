@@ -4,7 +4,10 @@ $.base64.utf8encode = true;
 $.base64.utf8decode = true;
 
 $('.dropdown-toggle').next().find('a').click(function () {
-    $('.dropdown-toggle').html(this.innerHTML)
+    var select = $(this).parent().parent().parent().find('.dropdown-toggle');
+    select.html(select.html().replace(select.text(), this.innerText))
+    $(this).parent().siblings().removeClass("active");
+    $(this).parent().addClass("active");
 });
 
 // HTML编码
@@ -50,8 +53,6 @@ $('.test').click(function() {
             ["alt"]
         ]
     });
-    console.log(formatSrc)
-    console.log($.base64.btoa(formatSrc));
     var address = "http://localhost/yg-site-construction/test.php";
     var datas = {
         name: 'mod01',
@@ -66,7 +67,7 @@ $('.test').click(function() {
             if(typeof(data) !== 'object') {
                 alert('服务器返回参数错误！')
             } else {
-                data.content ? $('.output').html(data.content) : alert(data.error);
+                data.content ? $('.output').html($.base64.atob(data.content)) : alert(data.error);
             }
         },
         error: function(a, b) {
