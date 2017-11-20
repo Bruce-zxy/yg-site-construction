@@ -5,6 +5,7 @@ include "./db.php";
 
 @$name = $_REQUEST['name'];
 @$content = $_REQUEST['content'];
+$_REQUEST['key_name'] = md5($_REQUEST['name']);
 
 $mydb = new DB("sites_construction");
 
