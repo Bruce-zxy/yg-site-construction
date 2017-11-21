@@ -74,7 +74,7 @@ body {
 .sidebar-nav .boxes { display:none;}
 
 .demo .preview { display: none; }
-.demo .box .view { display: block; padding-top:30px;}
+.demo .box .view { display: block; padding:10px;}
 
 
 .ui-draggable-dragging .view { display:block;}
