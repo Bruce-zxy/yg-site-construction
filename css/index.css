@@ -2,7 +2,6 @@
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,textarea,p,th,td{ margin:0; padding:0; box-sizing:border-box; }
 img{ display:block; border:none; vertical-align: middle; }/* display:block;  li>img  浮动时img下面的空白 */
 em,strong,i,b{font-style:normal; font-weight:normal;}
-li{list-style:none;}
 table { border-collapse:collapse; border-spacing:0;}
 h1{font-size:22px;}
 h2{font-size:20px;}
