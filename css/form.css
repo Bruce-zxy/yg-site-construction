@@ -31,7 +31,7 @@ span[size="40"] { font-size: 40px; }
 .container { max-width: 1020px; min-height: 700px; margin: 100px auto; padding: 0 10px; }
 .container>div { display: inline-block; float: left; }
 .container>p { width: 100%; height: 50px; background-color: #fff; line-height: 50px; box-sizing: border-box; position: relative; padding: 0 10px; border: 1px solid #ccc; }
-.container>p>span { float: right; height: 100%; line-height: 48px; }
+.container>p>span { float: right; height: 100%; line-height: 48px; cursor: pointer; }
 /*表单容器 End*/
 
 /*表单主体 Start*/
