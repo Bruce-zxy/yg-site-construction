@@ -15,86 +15,61 @@ input,textarea,select,optgroup,option{font-size:14px;}
 .table{ border-left:1px solid #e5e5e5; border-top:1px solid #e5e5e5; }
 .table th,.table td{ border-right:1px solid #e5e5e5; border-bottom:1px solid #e5e5e5; }
 /*自定义样式开始*/
+body{ background-color: #414364; }
 span[size] { margin: 0 5px; }
 span[size="15"] { font-size: 15px; }
 span[size="20"] { font-size: 20px; }
 span[size="40"] { font-size: 40px; }
+.form_page.color-1 .center_icon { color: #4E9FFF; }
+.form_page.color-2 .center_icon { color: #FFB54D; }
+.form_page.color-3 .center_icon { color: #54C7FC; }
+.form_page.color-4 .center_icon { color: #FF6885; }
 
+/*表单容器 Start*/
 .container { max-width: 1020px; min-height: 700px; margin: 100px auto; padding: 0 10px; }
 .container>div { display: inline-block; float: left; }
-.container>p { width: 100%; height: 50px; line-height: 50px; box-sizing: border-box; position: relative; padding: 0 10px; border: 1px solid #ccc; }
+.container>p { width: 100%; height: 50px; background-color: #fff; line-height: 50px; box-sizing: border-box; position: relative; padding: 0 10px; border: 1px solid #ccc; }
 .container>p>span { float: right; height: 100%; line-height: 48px; }
+/*表单容器 End*/
 
-.form_part {
-	width: 80%;
-	padding: 10px 0 0;
-}
-.form_new { line-height: 216px; position: relative; display: inline-block; float: left; box-sizing: content-box; width: 160px; height: 216px; margin: 0 20px 30px; padding: 0; cursor: pointer; text-align: center; vertical-align: middle; border: 1px solid #C3C9D0; border-style: dashed; border-radius: 3px; background: #FFF; }
+/*表单主体 Start*/
+.form_body { width: 80%; padding: 10px 0 0; position: relative; }
+/*创建新表单 Start*/
+.form_new { line-height: 216px; position: relative; z-index: 5; display: inline-block; float: left; width: 160px; height: 216px; margin: 0 30px 30px 10px; padding: 0; cursor: pointer; text-align: center; vertical-align: middle; border: 1px dashed #C3C9D0; border-radius: 3px; background: #FFF; }
+.form_new:hover { border: 1px dashed #009AFF; }
 .form_new:hover .create_form { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; }
 .form_new:hover .create_folder { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; }
-.form_new .plus { color: #666; }
+.form_new .plus { color: #666; height: calc(100% - 2px); }
 .create { font-size: 14px; position: absolute; top: 0; width: 100%; }
 .create_form { line-height: 160px; display: none; height: 160px; transition: all .25s ease-in-out; opacity: 0; }
-.create_folder { line-height: 56px; display: none; height: 56px; transition: all .25s ease-in-out; opacity: 0; }
+.create_folder { line-height: 54px; display: none; height: 54px; transition: all .25s ease-in-out; opacity: 0; }
 .create_form:hover, .create_folder:hover { color: #FFF; background-color: #009AFF !important; }
-.form_folder {
-	background-image: url('../img/form_folders.png');
-	background-repeat: no-repeat;
-    background-size: 173px auto;
-    width: 173px;
-    height: 216px;
-    position: relative;
-    display: inline-block;
-}
-.form_folder>div {
-	width: calc(100% - 20px);
-	color: #fff;
-}
-.form_folder .center_icon {
-	position: absolute;
-	top: 0;
-	text-align: center;
-	height: 216px;
-	line-height: 216px;
-	line-height: 210px;
-}
-.folder p {
-	height: 40px;
-	line-height: 40px;
-	margin: 10px;
-	text-align: center;
-}
-.folder p:last-child {
-	text-align: left;
-	position: absolute;
-	bottom: 0;
-}
-.folder p:last-child span {
-	margin-right: 10px;
-	font-size: 22px;
-}
+/*创建新表单 End*/
+/*已存在的表单 Start*/
+.form_part { width: 100%; }
+.form_part p { position: relative; z-index: 20; line-height: 40px; height: 40px; margin: 20px 10px 0; text-align: center; }
+.form_part .center_icon { line-height: 216px; line-height: 230px; position: absolute; z-index: 10; top: 0; height: 216px; text-align: center; }
+.form_folder { position: relative; float: left; display: inline-block; width: 173px; height: 216px; border: 1px solid transparent; margin: 0 15px 30px 10px; background-image: url("../img/form_folders.png"); background-repeat: no-repeat; background-size: 173px auto; cursor: pointer; }
+.form_folder> div { width: calc(100% - 20px); color: #FFF; }
+.folder p:last-child { position: absolute; bottom: 0; text-align: left; }
+.folder p:last-child span { font-size: 22px; margin-right: 10px; }
+.form_page { position: relative; float: left; z-index: 20; display: inline-block; width: 160px; height: 216px; background-color: #fff; border: 1px solid transparent; margin: 0 28px 30px 10px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); border-radius: 5px; cursor: pointer; }
+.form_page>div { width: 100%; }
+.page p:first-child { margin: 2px 10px 0; text-align: left; }
+.page p:last-child { position: absolute; bottom: 0; text-align: left; }
+.page p:last-child span { font-size: 22px; margin-right: 10px; }
+.form_folder.color-1 { background-position: 0 -0px; }
+.form_folder.color-2 { background-position: 0 -216px; }
+.form_folder.color-3 { background-position: 0 -432px; }
+.form_folder.color-4 { background-position: 0 -648px; }
+.form_folder.color-5 { background-position: 0 -864px; }
+/*已存在的表单 End*/
+.form_class { width: 20%; padding: 10px 0 0; color: #fff; }
+.form_class p { border-bottom: 1px solid #ccc; height: 30px; line-height: 20px; margin-bottom: 10px; }
+.form_class span { float: right; }
+.form_class li { cursor: pointer; margin: 5px 0; }
+
+/*表单主体 End*/
 
 
-.form-color-1 {
-	background-position: 0 -0px;
-}
-.form-color-2 {
-	background-position: 0 -216px;
-}
-.form-color-3 {
-	background-position: 0 -432px;
-}
-.form-color-4 {
-	background-position: 0 -648px;
-}
-.form-color-5 {
-	background-position: 0 -864px;
-}
-
-
-
-.form_class {
-	width: 20%;
-	padding: 10px 0 0;
-}
 
