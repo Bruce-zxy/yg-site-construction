@@ -1,0 +1,100 @@
+/*reset start*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,textarea,p,th,td{ margin:0; padding:0; box-sizing:border-box; }
+img{ display:block; border:none; vertical-align: middle; }/* display:block;  li>img  浮动时img下面的空白 */
+em,strong,i,b{font-style:normal; font-weight:normal;}
+table { border-collapse:collapse; border-spacing:0;}
+ul,li { list-style: none; }
+h1{font-size:22px;}
+h2{font-size:20px;}
+h3{font-size:18px;}
+h4, h5{font-size:16px;}
+h6{font-size:14px;}
+input::-ms-clear{display:none;}/*IE10 输入时产生的小叉*/
+input,textarea,select,optgroup,option{font-size:14px;} 
+/*table边框*/
+.table{ border-left:1px solid #e5e5e5; border-top:1px solid #e5e5e5; }
+.table th,.table td{ border-right:1px solid #e5e5e5; border-bottom:1px solid #e5e5e5; }
+/*自定义样式开始*/
+span[size] { margin: 0 5px; }
+span[size="15"] { font-size: 15px; }
+span[size="20"] { font-size: 20px; }
+span[size="40"] { font-size: 40px; }
+
+.container { max-width: 1020px; min-height: 700px; margin: 100px auto; padding: 0 10px; }
+.container>div { display: inline-block; float: left; }
+.container>p { width: 100%; height: 50px; line-height: 50px; box-sizing: border-box; position: relative; padding: 0 10px; border: 1px solid #ccc; }
+.container>p>span { float: right; height: 100%; line-height: 48px; }
+
+.form_part {
+	width: 80%;
+	padding: 10px 0 0;
+}
+.form_new { line-height: 216px; position: relative; display: inline-block; float: left; box-sizing: content-box; width: 160px; height: 216px; margin: 0 20px 30px; padding: 0; cursor: pointer; text-align: center; vertical-align: middle; border: 1px solid #C3C9D0; border-style: dashed; border-radius: 3px; background: #FFF; }
+.form_new:hover .create_form { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; }
+.form_new:hover .create_folder { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; }
+.form_new .plus { color: #666; }
+.create { font-size: 14px; position: absolute; top: 0; width: 100%; }
+.create_form { line-height: 160px; display: none; height: 160px; transition: all .25s ease-in-out; opacity: 0; }
+.create_folder { line-height: 56px; display: none; height: 56px; transition: all .25s ease-in-out; opacity: 0; }
+.create_form:hover, .create_folder:hover { color: #FFF; background-color: #009AFF !important; }
+.form_folder {
+	background-image: url('../img/form_folders.png');
+	background-repeat: no-repeat;
+    background-size: 173px auto;
+    width: 173px;
+    height: 216px;
+    position: relative;
+    display: inline-block;
+}
+.form_folder>div {
+	width: calc(100% - 20px);
+	color: #fff;
+}
+.form_folder .center_icon {
+	position: absolute;
+	top: 0;
+	text-align: center;
+	height: 216px;
+	line-height: 216px;
+	line-height: 210px;
+}
+.folder p {
+	height: 40px;
+	line-height: 40px;
+	margin: 10px;
+	text-align: center;
+}
+.folder p:last-child {
+	text-align: left;
+	position: absolute;
+	bottom: 0;
+}
+.folder p:last-child span {
+	margin-right: 10px;
+	font-size: 22px;
+}
+
+
+.form-color-1 {
+	background-position: 0 -0px;
+}
+.form-color-2 {
+	background-position: 0 -216px;
+}
+.form-color-3 {
+	background-position: 0 -432px;
+}
+.form-color-4 {
+	background-position: 0 -648px;
+}
+.form-color-5 {
+	background-position: 0 -864px;
+}
+
+
+
+.form_class {
+	width: 20%;
+	padding: 10px 0 0;
+}
+
