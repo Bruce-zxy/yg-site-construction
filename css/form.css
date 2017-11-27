@@ -21,11 +21,11 @@ span[size] { margin: 0 5px; }
 span[size="15"] { font-size: 15px; }
 span[size="20"] { font-size: 20px; }
 span[size="40"] { font-size: 40px; }
-.form_page.color-1 .center_icon { color: #4E9FFF; }
-.form_page.color-2 .center_icon { color: #FFB54D; }
-.form_page.color-3 .center_icon { color: #54C7FC; }
-.form_page.color-4 .center_icon { color: #FF6885; }
-.form_page.color-5 .center_icon { color: #44DB5E; }
+.color-1 .center_icon { color: #4E9FFF; }
+.color-2 .center_icon { color: #FFB54D; }
+.color-3 .center_icon { color: #54C7FC; }
+.color-4 .center_icon { color: #FF6885; }
+.color-5 .center_icon { color: #44DB5E; }
 
 /*表单容器 Start*/
 .container { max-width: 1020px; min-height: 700px; margin: 100px auto; padding: 0 10px; }

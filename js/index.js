@@ -264,6 +264,7 @@ function downloadLayoutSrc() {
             ["data-slide"]
         ]
     });
+    console.log(formatSrc);
     // $("#download-layout").html(formatSrc);
     // $("#downloadModal textarea").empty();
     // $("#downloadModal textarea").val(formatSrc)
