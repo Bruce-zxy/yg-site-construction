@@ -95,4 +95,9 @@ span[size="40"] { font-size: 40px; }
 /*表单主体 End*/
 
 
-
+/*生成动画*/
+.animate { animation: animation .5s; -webkit-animation: animation .5s; /* Safari 和 Chrome */ }
+@keyframes animation {
+	from { transform: scale(0.1, 0.1); transform-origin: 50% 50%; }
+	to { transform: scale(1, 1); transform-origin: 50% 50%; }
+}
