@@ -59,3 +59,9 @@ function createFolder() {
 _colors.click(colorsChange)
 _icons.click(iconsBG);
 _createLabel.click(createFolder);
+
+$(".create").hover(function () {
+	$(".create_form").show();
+	$(".create_folder").show();
+})
+

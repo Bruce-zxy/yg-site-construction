@@ -44,7 +44,7 @@ span[size="40"] { font-size: 40px; }
 /*创建新表单 Start*/
 .form_new { line-height: 216px; position: relative; z-index: 50; display: inline-block; float: left; width: 160px; height: 216px; margin: 0 30px 30px 10px; padding: 0; cursor: pointer; text-align: center; vertical-align: middle; border: 1px dashed #C3C9D0; border-radius: 3px; background: #FFF; }
 .form_new .plus { color: #666; height: calc(100% - 2px); }
-.create { font-size: 14px; position: absolute; top: 0; width: 100%; height: 100%;}
+.create { font-size: 14px; position: absolute; top: 0; width: 100%; height: 100%; border: 1px dashed transparent; }
 .create:hover { border: 1px dashed #009AFF; border-radius: 5px }
 .create:hover .create_form { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; border-radius: 5px 5px 0 0; }
 .create:hover .create_folder { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; border-radius: 0 0 5px 5px; }
@@ -56,7 +56,7 @@ span[size="40"] { font-size: 40px; }
 .form_part { width: 100%; }
 .form_part p { position: relative; z-index: 20; line-height: 40px; height: 40px; margin: 20px 10px 0; text-align: center; }
 .form_part .center_icon { line-height: 216px; line-height: 230px; position: absolute; z-index: 10; top: 0; height: 216px; text-align: center; }
-.form_folder a { position: relative; float: left; display: inline-block; width: 173px; height: 216px; border: 1px solid transparent; margin: 0 15px 30px 10px; background-image: url("../img/form_folders.png"); background-repeat: no-repeat; background-size: 173px auto; cursor: pointer; }
+.form_folder a { position: relative; float: left; display: inline-block; width: 173px; height: 214px; border: 1px solid transparent; margin: 0 15px 30px 10px; background-image: url("../img/form_folders.png"); background-repeat: no-repeat; background-size: 173px auto; cursor: pointer; }
 .form_folder a> div { width: calc(100% - 20px); color: #FFF; }
 .form_folder a .center_icon { color: #FFF; }
 .folder p:last-child { position: absolute; bottom: 0; text-align: left; }
@@ -67,10 +67,10 @@ span[size="40"] { font-size: 40px; }
 .page p:last-child { position: absolute; bottom: 0; text-align: left; }
 .page p:last-child span { font-size: 22px; margin-right: 10px; }
 .form_folder.color-1 a { background-position: 0 -0px; }
-.form_folder.color-2 a { background-position: 0 -216px; }
-.form_folder.color-3 a { background-position: 0 -432px; }
-.form_folder.color-4 a { background-position: 0 -648px; }
-.form_folder.color-5 a { background-position: 0 -865px; }
+.form_folder.color-2 a { background-position: 0 -217px; }
+.form_folder.color-3 a { background-position: 0 -433px; }
+.form_folder.color-4 a { background-position: 0 -649px; }
+.form_folder.color-5 a { background-position: 0 -866px; }
 /*已存在的表单 End*/
 .form_class { width: 20%; padding: 10px 0 0; color: #fff; }
 .form_class p { border-bottom: 1px solid #ccc; height: 30px; line-height: 20px; margin-bottom: 10px; }
@@ -93,6 +93,8 @@ span[size="40"] { font-size: 40px; }
 .tips .icons span { box-sizing: content-box; border-radius: 5px; box-shadow: 0 0 1px #999; }
 /*创建表单Tips End*/
 /*表单主体 End*/
+
+
 
 
 /*生成动画*/
