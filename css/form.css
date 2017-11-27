@@ -26,6 +26,11 @@ span[size="40"] { font-size: 40px; }
 .color-3 .center_icon { color: #54C7FC; }
 .color-4 .center_icon { color: #FF6885; }
 .color-5 .center_icon { color: #44DB5E; }
+.bg-color-1 { color: #fff; background-color: #4E9FFF; }
+.bg-color-2 { color: #fff; background-color: #FFB54D; }
+.bg-color-3 { color: #fff; background-color: #54C7FC; }
+.bg-color-4 { color: #fff; background-color: #FF6885; }
+.bg-color-5 { color: #fff; background-color: #44DB5E; }
 
 /*表单容器 Start*/
 .container { max-width: 1020px; min-height: 700px; margin: 100px auto; padding: 0 10px; }
@@ -37,14 +42,14 @@ span[size="40"] { font-size: 40px; }
 /*表单主体 Start*/
 .form_body { width: 80%; padding: 10px 0 0; position: relative; }
 /*创建新表单 Start*/
-.form_new { line-height: 216px; position: relative; z-index: 5; display: inline-block; float: left; width: 160px; height: 216px; margin: 0 30px 30px 10px; padding: 0; cursor: pointer; text-align: center; vertical-align: middle; border: 1px dashed #C3C9D0; border-radius: 3px; background: #FFF; }
-.form_new:hover { border: 1px dashed #009AFF; }
-.form_new:hover .create_form { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; }
-.form_new:hover .create_folder { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; }
+.form_new { line-height: 216px; position: relative; z-index: 50; display: inline-block; float: left; width: 160px; height: 216px; margin: 0 30px 30px 10px; padding: 0; cursor: pointer; text-align: center; vertical-align: middle; border: 1px dashed #C3C9D0; border-radius: 3px; background: #FFF; }
 .form_new .plus { color: #666; height: calc(100% - 2px); }
-.create { font-size: 14px; position: absolute; top: 0; width: 100%; }
+.create { font-size: 14px; position: absolute; top: 0; width: 100%; height: 100%;}
+.create:hover { border: 1px dashed #009AFF; border-radius: 5px }
+.create:hover .create_form { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; border-radius: 5px 5px 0 0; }
+.create:hover .create_folder { display: block; transition: all .25s ease-in-out; opacity: 1; background-color: #FFF; border-radius: 0 0 5px 5px; }
 .create_form { line-height: 160px; display: none; height: 160px; transition: all .25s ease-in-out; opacity: 0; }
-.create_folder { line-height: 54px; display: none; height: 54px; transition: all .25s ease-in-out; opacity: 0; }
+.create_folder { line-height: 52px; display: none; height: 52px; transition: all .25s ease-in-out; opacity: 0; }
 .create_form:hover, .create_folder:hover { color: #FFF; background-color: #009AFF !important; }
 /*创建新表单 End*/
 /*已存在的表单 Start*/
@@ -53,8 +58,9 @@ span[size="40"] { font-size: 40px; }
 .form_part .center_icon { line-height: 216px; line-height: 230px; position: absolute; z-index: 10; top: 0; height: 216px; text-align: center; }
 .form_folder a { position: relative; float: left; display: inline-block; width: 173px; height: 216px; border: 1px solid transparent; margin: 0 15px 30px 10px; background-image: url("../img/form_folders.png"); background-repeat: no-repeat; background-size: 173px auto; cursor: pointer; }
 .form_folder a> div { width: calc(100% - 20px); color: #FFF; }
+.form_folder a .center_icon { color: #FFF; }
 .folder p:last-child { position: absolute; bottom: 0; text-align: left; }
-.folder p:last-child span { font-size: 22px; margin-right: 10px; }
+.folder p:last-child span { font-size: 22px; margin-right: 10px; float: left; }
 .form_page a { position: relative; float: left; z-index: 20; display: inline-block; width: 160px; height: 216px; background-color: #fff; border: 1px solid transparent; margin: 0 28px 30px 10px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); border-radius: 5px; cursor: pointer; }
 .form_page a>div { width: 100%; }
 .page p:first-child { margin: 2px 10px 0; text-align: left; }
@@ -64,12 +70,28 @@ span[size="40"] { font-size: 40px; }
 .form_folder.color-2 a { background-position: 0 -216px; }
 .form_folder.color-3 a { background-position: 0 -432px; }
 .form_folder.color-4 a { background-position: 0 -648px; }
-.form_folder.color-5 a { background-position: 0 -864px; }
+.form_folder.color-5 a { background-position: 0 -865px; }
 /*已存在的表单 End*/
 .form_class { width: 20%; padding: 10px 0 0; color: #fff; }
 .form_class p { border-bottom: 1px solid #ccc; height: 30px; line-height: 20px; margin-bottom: 10px; }
 .form_class span { float: right; }
 .form_class li { cursor: pointer; margin: 5px 0; }
+/*创建表单Tips Start*/
+.tips.create_folder_tip { display: block; }
+.tips { line-height: 30px; position: absolute; z-index: 50; top: 100px; left: 170px; display: none; width: 205px; background-color: #FFF; box-shadow: 0 0 5px #EEE; }
+.tips:before { font-size: 0; position: absolute; z-index: 99; top: 50%; left: -10px; box-sizing: border-box; margin-top: -5px; content: ""; border-top: 10px solid transparent; border-right: 10px solid #FFF; border-bottom: 10px solid transparent; }
+.tips> span { font-size: 0; display: block; }
+.tips .name { height: auto; margin-bottom: 10px; }
+.tips .name label { font-size: 14px; display: block; box-sizing: border-box; width: 100%; padding-right: 10px; cursor: pointer; text-align: right; color: rgb(0, 154, 255); }
+.tips .name input { line-height: 30px; width: 100%; height: 30px; padding: 5px; color: #666; border-width: 1px 0; border-color: #EEE; outline: none; }
+.tips> span> span { line-height: 35px; display: inline-block; box-sizing: border-box; width: 35px; height: 35px; margin: 0 5px 5px 0; border-radius: 5px; }
+.tips .color { width: 100%; height: 40px; padding-left: 5px; color: #FFF; }
+.tips .color span { float: left; }
+.tips .color .icon-ok:before { width: 100%; }
+.tips .icons { margin-bottom: 10px; padding-left: 5px; }
+.tips .icons [class^="icon-"]:before { width: 100%; }
+.tips .icons span { box-sizing: content-box; border-radius: 5px; box-shadow: 0 0 1px #999; }
+/*创建表单Tips End*/
 /*表单主体 End*/
 
 
