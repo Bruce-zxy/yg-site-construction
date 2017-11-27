@@ -31,13 +31,11 @@ if (empty($_REQUEST['name'])) {
             $updateResult = $mydb->update($_REQUEST, "name='$name'");
             $result = $updateResult ? findContent($mydb, $name) : error($result, '页面更新出错！');
         }
+    } else if (empty($result["content"])) {
+        $result = error($result, "您上次保存页面未成功，内容为空！");
     } else {
-        if (empty($_REQUEST["content"])) {
-            $result = error($result, "您上次保存页面未成功，内容为空！");
-        } else {
-            $addResult = $mydb->add($_REQUEST);
-            $result = $addResult ? findContent($mydb, $name) : error($result, '页面保存出错！');
-        }
+        $addResult = $mydb->add($_REQUEST);
+        $result = $addResult ? findContent($mydb, $name) : error($result, '页面保存出错！');
     }
 }
 
