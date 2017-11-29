@@ -105,10 +105,10 @@ var createFolder = function () {
 }
 // 储存某一页的表单
 // 统计某一页表单数量
-var getNum = function (data, classify, sum) {
+var getNum = function (data, classify) {
     firstLayer[classify] = data;
     traversingData(data.sort(byTime("CREATE_TIME")));
-    sum = data.length;
+    return data.length;
 }
 // 遍历返回数组
 var traversingData = function (data) {
@@ -148,7 +148,7 @@ var render = function (firstLayerSort) {
 }
 // 最终渲染结束
 var renderOver = function (state) {
-	state ? doSomeThing() : null;
+	state ? doSomething() : null;
 }
 // 获取数据
 var fetch = function (url, data, func) {
@@ -167,18 +167,20 @@ var fetch = function (url, data, func) {
 	});
 }
 var getFirstPages = function (data) {
-	getNum(data, "page", pageSum);
+	pageSum = getNum(data, "page");
 	fetch(addrGet, { db: "files_system" }, getFirstFolders);
 }
 var getFirstFolders = function (data) {
-	getNum(data, "folder", folderSum);
+	folderSum = getNum(data, "folder");
 	render(firstLayerSort);
 }
 // 页面加载完毕后的js操作
-var doSomeThing = function () {
+var doSomething = function () {
 
+	console.log("do something!");
 	// do some thing after render!
-
+	$(".class_num")[0].innerHTML = pageSum + folderSum;
+	$(".class_num")[1].innerHTML = folderSum;
 
 
 
