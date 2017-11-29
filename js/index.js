@@ -10,7 +10,7 @@ var startdrag = 0;
 var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
-var address = "http://localhost/yg-site-construction/test.php";
+var address = "http://localhost/yg-site-construction/edit.php";
 
 function handleSaveLayout() {
     var e = $(".demo").html();
