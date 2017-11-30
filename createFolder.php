@@ -3,43 +3,50 @@ header("Access-Control-Allow-Origin: *");
 
 include "./db.php";
 
-$db_form = $_REQUEST["type"] === "folder" ? "files_system" : "sites_construction";
+$param = $_REQUEST;
+$db_form = $_REQUEST["TYPE"] === "folder" ? "files_system" : "sites_construction";
 $myDB = new DB($db_form);
-switch ($_REQUEST["action"]) {
+$response = array();
+
+unset($param["ACTION"]);
+
+function addData($myDB)
+{
+    global $response, $result, $param;
+    $result = $myDB->add($param);
+    if ($result) {
+        $response["content"] = "success";
+    } else {
+        $response["error"] = "未添加进数据库！";
+    }
+}
+function updateData($myDB)
+{
+    # code...
+}
+function deleteData($myDB)
+{
+    # code...
+}
+function error($myDB)
+{
+    global $response;
+    $response["error"] = "请求动作未定义！";
+}
+
+switch ($_REQUEST["ACTION"]) {
     case 'add':
-        echo "test1";
-        addData();
+        addData($myDB);
         break;
     case 'update':
-        echo "test2";
-        updateData();
+        updateData($myDB);
         break;
     case 'delete':
-        echo "test3";
-        deleteData();
+        deleteData($myDB);
         break;
     default:
-        echo "test4";
-        error();
+        error($myDB);
         break;
 }
-function addData()
-{
-    # code...
-}
-function updateData()
-{
-    # code...
-}
-function deleteData()
-{
-    # code...
-}
-function error()
-{
-    $response["error"] = "请求动作未定义";
-}
-error();
-// $result = $myDB->add("SELECT * FROM $db_form");
 
-echo json_encode($response["error"]);
+echo json_encode($response);

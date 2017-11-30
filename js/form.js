@@ -1,5 +1,6 @@
 var addrGet = "http://localhost/yg-site-construction/getAll.php";
 var addrSend = "http://localhost/yg-site-construction/createFolder.php";
+var _createForm = $(".create_form");
 var _createFolder = $('.create_folder');
 var _createLabel = $(".tips .name label");
 var _document = $(document);
@@ -27,6 +28,8 @@ var folderSum = 0;
 var folderSystem = function (editColor, editIcon, name, kind) {
 	var classify = kind ? "folder" : "page";
 	var content = kind ? "表单" : "数据";
+	var link = kind ? "javascript:;" : "./edit.html?name=" + name;
+	console.log(editColor);
 	editColor = editColor.length > 7 ? editColor.slice(3) : editColor;
 	var docfrag = document.createDocumentFragment();
 	var DIV1 = document.createElement('div');
@@ -36,7 +39,7 @@ var folderSystem = function (editColor, editIcon, name, kind) {
 	var DIV3 = document.createElement('div');
 	DIV3.className = "center_icon";
 	var A = document.createElement('a');
-	A.href = "javascript:;";
+	A.href = link;
 	A.className = "animate ui-state-default";
 	A.setAttribute("draggable", true);
 	var P1 = document.createElement('p');
@@ -73,15 +76,21 @@ var iconsBG = function () {
 	editIcon = $(this)[0].className.split(" ")[0];
 }
 // 点击事件
+var createForm = function () {
+	window.location.href = "./edit.html";
+}
+// 点击事件
 var createFolder = function () {
 	var folderName = _tip.find(".name input").val() || "未命名文件夹";
+	editColor = editColor.length > 7 ? editColor.slice(3) : editColor;
+	console.log(editColor);
 	var datas = {
-		name: folderName,
-		classify: editColor + " " + editIcon,
-		create_time: new Date().getTime(),
-		type: "folder",
-		parentFolder: 0,
-		action: "add",
+		NAME: folderName,
+		CLASSIFY: editColor + "," + editIcon,
+		CREATE_TIME: new Date().getTime(),
+		TYPE: "folder",
+		PARENT_FOLDER: 0,
+		ACTION: "add",
 	};
 	$(".form_part").prepend(folderSystem(editColor, editIcon, folderName, true));
 	$.ajax({
@@ -202,6 +211,7 @@ _create.hover(function () {
 })
 _colors.click(colorsChange)
 _icons.click(iconsBG);
+_createForm.click(createForm);
 _createLabel.click(createFolder);
 
 

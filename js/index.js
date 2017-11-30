@@ -3,6 +3,8 @@
 $.base64.utf8encode = true;
 $.base64.utf8decode = true;
 
+var url = location.search;
+var Request = new Object();
 var currentDocument = null;
 var timerSave = 1000;
 var stopsave = 0;
@@ -11,6 +13,36 @@ var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
 var address = "http://localhost/yg-site-construction/edit.php";
+
+if (url.indexOf("?") != -1) {　　
+    var str = url.substr(1)　 //去掉?号
+        　　 strs = str.split("&");　　
+    for (var i = 0; i < strs.length; i++)　　 {
+        Request[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);　　
+    }
+}
+if(Request["name"]) {
+    layoutName = Request["name"];
+    getContent(layoutName);
+}
+function getContent(pageName) {
+    $.ajax({
+        type: "post",
+        url: address,
+        data: { name: pageName},
+        success: function(data) {
+            data = JSON.parse(data);
+            if(typeof(data) !== 'object') {
+                alert('服务器返回参数错误！')
+            } else {
+                $(".demo").html($.base64.atob(data.content));
+            }
+        },
+        error: function(a, b) {
+            alert('向服务器请求数据失败！');
+        }
+    });
+}
 
 function handleSaveLayout() {
     var e = $(".demo").html();
@@ -328,6 +360,7 @@ $(document).ready(function() {
         contentsCss: ['css/bootstrap-combined.min.css'],
         allowedContent: true
     });
+    layoutName ? $(".mask").css("display", "none") : null;
     $(".saveLayoutName").click(function () {
         layoutName = $(this).prev().val();
         $(".mask").css("display", "none");

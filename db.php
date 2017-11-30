@@ -40,7 +40,7 @@ class DB
     }
 
     // 查询多条数据
-    // Eg: $myDB->find("SELECT * FROM foo_table")
+    // Eg: $myDB->select("SELECT * FROM foo_table")
     // Re: Array()
 
     public function select($sql)
@@ -72,7 +72,7 @@ class DB
     }
 
     // 插入数据
-    // $myDB->find($_REQUEST)
+    // $myDB->add($_REQUEST)
     // Re: Boolean, True Or False
 
     public function add($data)
