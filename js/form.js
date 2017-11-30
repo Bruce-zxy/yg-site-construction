@@ -81,7 +81,7 @@ var createFolder = function () {
 		create_time: new Date().getTime(),
 		type: "folder",
 		parentFolder: 0,
-		action: "error",
+		action: "add",
 	};
 	$(".form_part").prepend(folderSystem(editColor, editIcon, folderName, true));
 	$.ajax({
