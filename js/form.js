@@ -9,13 +9,16 @@ var _colors = $(".color span");
 var _icons = $(".icons span");
 var _tip = $(".tips");
 var _classNum = $(".class_num");
+var _formFolder = $(".form_folder a");
+var _nav = $(".navbar");
 var editColor = _colors.parent().find(".icon-ok")[0].className.split(" ")[0];
 var editIcon = $(".icons ."+editColor)[0].className.split(" ")[0];
-var firstLayer = [];
-var firstLayerSort = [];
+var presentFolder = sessionStorage.getItem("presentFolder");
+var presentPath = sessionStorage.getItem("presentPath");
+var parentFolder = 0;
 var pageSum = 0;
 var folderSum = 0;
-var parentFolder = 0;
+var firstLayerSort = [];
 /**
  * [folderSystem description]
  * @Author   bruce_zxy
@@ -27,7 +30,7 @@ var parentFolder = 0;
  * @param    {boolean}                kind      是否是文件夹
  * @return   {object}                 docfrag	DOM树画布          
  */
-var folderSystem = function (editColor, editIcon, name, kind) {
+var folderSystem = function (editColor, editIcon, name, kind, id) {
 	var classify = kind ? "folder" : "page";
 	var content = kind ? "表单" : "数据";
 	var link = kind ? "javascript:;" : "./edit.html?name=" + name;
@@ -43,6 +46,7 @@ var folderSystem = function (editColor, editIcon, name, kind) {
 	A.href = link;
 	A.className = "animate ui-state-default";
 	A.setAttribute("draggable", !kind);
+	A.setAttribute("data-folder", id)
 	var P1 = document.createElement('p');
 	P1.textContent = name;
 	var P2 = document.createElement('p');
@@ -89,7 +93,7 @@ var createFolder = function () {
 		CLASSIFY: editColor + "," + editIcon,
 		CREATE_TIME: new Date().getTime(),
 		TYPE: "folder",
-		PARENT_FOLDER: parentFolder,
+		PARENT_FOLDER: presentFolder,
 		ACTION: "add",
 	};
 	$(".form_part").prepend(folderSystem(editColor, editIcon, folderName, true));
@@ -126,12 +130,12 @@ var createFolder = function () {
  * @return   {Number}                          返回对应的数量
  */
 var getNum = function (data, classify) {
-    firstLayer[classify] = data;
     traversingData(data.sort(byTime("CREATE_TIME")));
     return data.length;
 }
 // 遍历返回数组
 var traversingData = function (data) {
+	console.log(firstLayerSort);
     for (var i = 0; i < data.length; i++) 
     	firstLayerSort.push(data[i]);
 }
@@ -152,26 +156,29 @@ var byTime = function(name) {
 }
 // 最终渲染开始
 var render = function (firstLayerSort) {
-	var __COLOR, __ICON, __NAME, __CLASSIFY, __I, __LEN, __T, __STATE;
+	var __COLOR, __ICON, __NAME, __CLASSIFY, __I, __LEN, __T, __STATE,__ID;
 	__I = 0;
     __LEN = firstLayerSort.length - 1;
     __T = setInterval(function () {
     	__COLOR = firstLayerSort[__I].CLASSIFY.split(",")[0];
     	__ICON = firstLayerSort[__I].CLASSIFY.split(",")[1];
     	__CLASSIFY = firstLayerSort[__I].TYPE && firstLayerSort[__I].TYPE === "folder" ? true : false;
-    	__NAME = firstLayerSort[__I++].NAME;
+    	__NAME = firstLayerSort[__I].NAME;
+    	__ID = firstLayerSort[__I++].ID
     	__STATE = __I > __LEN;
     	__STATE ? window.clearInterval(__T) : null;
-    	$(".form_part").prepend(folderSystem(__COLOR, __ICON, __NAME, __CLASSIFY));
+    	$(".form_part").prepend(folderSystem(__COLOR, __ICON, __NAME, __CLASSIFY, __ID));
     	renderOver(__STATE);
     }, 25)
 }
 // 最终渲染结束
 var renderOver = function (state) {
+	firstLayerSort = [];
 	state ? doSomething() : null;
 }
 // 获取数据
 var fetch = function (url, data, func) {
+	var getFolder = data.parentFolder;
 	$.ajax({
 	    type: "post",
 	    url: url,
@@ -180,32 +187,56 @@ var fetch = function (url, data, func) {
 	    	console.log(data);
 	        data = JSON.parse(data);
 	        console.log(data);
-	        typeof(data) === 'object' ? func ? func(data, data.length === 0) : console.log(data) : alert('服务器返回参数错误或未找到数据！');
+	        typeof(data) === 'object' ? func ? func(data, data.length === 0, getFolder) : console.log(data) : alert('服务器返回参数错误或未找到数据！');
 	    },
 	    error: function(a, b) {
 	        alert('向服务器请求数据失败！');
 	    }
 	});
 }
-var getFirstPages = function (data, dataNull) {
+var getFirstPages = function (data, dataNull, getFolder) {
 	pageSum = dataNull ? 0 : getNum(data, "page");
-	fetch(addrGet, { DB: "files_system", PARENT_FOLDER: parentFolder }, getFirstFolders);
+	fetch(addrGet, { DB: "files_system", PARENT_FOLDER: getFolder }, getFirstFolders);
 }
 var getFirstFolders = function (data, dataNull) {
 	folderSum = dataNull ? 0 : getNum(data, "folder");
-	render(firstLayerSort);
+	console.log(firstLayerSort.length);
+	console.log(firstLayerSort);
+	$(".form_part").html("");
+	firstLayerSort.length ? render(firstLayerSort) : null;
 }
 // 更新右侧类别数据
 var updateClass = function () {
 	_classNum[0].innerHTML = pageSum + folderSum;
 	_classNum[1].innerHTML = folderSum;
 }
-// 页面加载完毕后的js操作
+// 点击文件夹进入下级文件夹
+var deepFolder = function () {
+	var deepName = $(this).find(".folder p:first-child")[0].innerText;
+	parentFolder = this.getAttribute("data-folder");
+	sessionStorage.setItem("presentFolder", parentFolder);
+	_nav.append('<span>><a href="javascript:;" data-folder="'+parentFolder+'">'+deepName+'</a></span>')
+	navLink();
+	sessionStorage.setItem("presentPath", _nav.html());
+	fetch(addrGet, { DB: "sites_construction", PARENT_FOLDER: parentFolder }, getFirstPages);
+}
+// 导航栏添加点击事件
+var navLink = function () {
+	_nav.find('a').map(function () {
+		this.onclick = function () {
+			$(this).parent().nextAll().remove();
+			fetch(addrGet, { DB: "sites_construction", PARENT_FOLDER: this.getAttribute("data-folder") }, getFirstPages);
+		}
+	});
+}
+// 每次页面重新请求并加载完毕后的js操作
 var doSomething = function () {
 
 	console.log("do something!");
 	// do some thing after render!
 	updateClass();
+	_formFolder = $(".form_folder a");
+	_formFolder.click(deepFolder);
 
 
 
@@ -213,8 +244,18 @@ var doSomething = function () {
 	console.timeEnd('testForEach');
 }
 
+parentFolder = presentFolder || parentFolder;
+presentPath ? _nav.html(presentPath) : null;
+navLink();
 fetch(addrGet, { DB: "sites_construction", PARENT_FOLDER: parentFolder }, getFirstPages);
-
+_colors.click(colorsChange)
+_icons.click(iconsBG);
+_createForm.click(createForm);
+_createLabel.click(createFolder);
+_create.hover(function () {
+	$(".create_form").show();
+	$(".create_folder").show();
+});
 _document.click(function(event){
 	if(!_createFolder.is(event.target) && _tip.has(event.target).length === 0 || _createLabel.is(event.target)){
 		_tip.hide(250);
@@ -222,14 +263,8 @@ _document.click(function(event){
 		_tip.show(250);
 	}
 });
-_create.hover(function () {
-	$(".create_form").show();
-	$(".create_folder").show();
-})
-_colors.click(colorsChange)
-_icons.click(iconsBG);
-_createForm.click(createForm);
-_createLabel.click(createFolder);
+
+
 
 
 
