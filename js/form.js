@@ -8,12 +8,14 @@ var _create = $(".create");
 var _colors = $(".color span");
 var _icons = $(".icons span");
 var _tip = $(".tips");
+var _classNum = $(".class_num");
 var editColor = _colors.parent().find(".icon-ok")[0].className.split(" ")[0];
 var editIcon = $(".icons ."+editColor)[0].className.split(" ")[0];
 var firstLayer = [];
 var firstLayerSort = [];
 var pageSum = 0;
 var folderSum = 0;
+var parentFolder = 0;
 /**
  * [folderSystem description]
  * @Author   bruce_zxy
@@ -29,7 +31,6 @@ var folderSystem = function (editColor, editIcon, name, kind) {
 	var classify = kind ? "folder" : "page";
 	var content = kind ? "表单" : "数据";
 	var link = kind ? "javascript:;" : "./edit.html?name=" + name;
-	console.log(editColor);
 	editColor = editColor.length > 7 ? editColor.slice(3) : editColor;
 	var docfrag = document.createDocumentFragment();
 	var DIV1 = document.createElement('div');
@@ -41,7 +42,7 @@ var folderSystem = function (editColor, editIcon, name, kind) {
 	var A = document.createElement('a');
 	A.href = link;
 	A.className = "animate ui-state-default";
-	A.setAttribute("draggable", true);
+	A.setAttribute("draggable", !kind);
 	var P1 = document.createElement('p');
 	P1.textContent = name;
 	var P2 = document.createElement('p');
@@ -62,34 +63,33 @@ var folderSystem = function (editColor, editIcon, name, kind) {
 	docfrag.appendChild(DIV1);
 	return docfrag;
 }
-// 点击事件
+// 点击创建文件夹改变图标颜色
 var colorsChange = function () {
 	editColor = this.className.split(" ")[0];
 	_colors.removeClass("icon-ok");
 	$(this).addClass("icon-ok");
 	iconsBG.call($('.icons span[class*="bg-color-"]'));
 }
-// 点击事件
+// 点击创建文件夹选择图标
 var iconsBG = function () {
 	for (i in _icons) !isNaN(i*1) && _icons[i].className.split(" ")[1] ? _icons[i].className = _icons[i].className.split(" ")[0] : null
 	$(this).addClass(editColor);
 	editIcon = $(this)[0].className.split(" ")[0];
 }
-// 点击事件
+// 创建新页面
 var createForm = function () {
 	window.location.href = "./edit.html";
 }
-// 点击事件
+// 创建文件夹
 var createFolder = function () {
 	var folderName = _tip.find(".name input").val() || "未命名文件夹";
 	editColor = editColor.length > 7 ? editColor.slice(3) : editColor;
-	console.log(editColor);
 	var datas = {
 		NAME: folderName,
 		CLASSIFY: editColor + "," + editIcon,
 		CREATE_TIME: new Date().getTime(),
 		TYPE: "folder",
-		PARENT_FOLDER: 0,
+		PARENT_FOLDER: parentFolder,
 		ACTION: "add",
 	};
 	$(".form_part").prepend(folderSystem(editColor, editIcon, folderName, true));
@@ -111,9 +111,20 @@ var createFolder = function () {
 	        alert('向服务器请求数据失败！');
 	    }
 	});
+	folderSum++;
+	updateClass();
 }
 // 储存某一页的表单
 // 统计某一页表单数量
+/**
+ * [getNum description]
+ * @Author   bruce_zxy
+ * @DateTime 2017-12-01T10:55:41+0800
+ * @version  [version]
+ * @param    {Object}                 data     异步返回的数据数组
+ * @param    {String}                 classify 文件夹还是页面
+ * @return   {Number}                          返回对应的数量
+ */
 var getNum = function (data, classify) {
     firstLayer[classify] = data;
     traversingData(data.sort(byTime("CREATE_TIME")));
@@ -124,7 +135,7 @@ var traversingData = function (data) {
     for (var i = 0; i < data.length; i++) 
     	firstLayerSort.push(data[i]);
 }
-// 数据按时间排序(小 -> 大)
+// 数据按创建时间排序(小 -> 大)
 var byTime = function(name) {
     return function(o, p) {
         var a, b;
@@ -166,37 +177,43 @@ var fetch = function (url, data, func) {
 	    url: url,
 	    data: data,
 	    success: function(data) {
+	    	console.log(data);
 	        data = JSON.parse(data);
 	        console.log(data);
-	        typeof(data) === 'object' ? func ? func(data) : console.log(data) : alert('服务器返回参数错误！');
+	        typeof(data) === 'object' ? func ? func(data, data.length === 0) : console.log(data) : alert('服务器返回参数错误或未找到数据！');
 	    },
 	    error: function(a, b) {
 	        alert('向服务器请求数据失败！');
 	    }
 	});
 }
-var getFirstPages = function (data) {
-	pageSum = getNum(data, "page");
-	fetch(addrGet, { db: "files_system" }, getFirstFolders);
+var getFirstPages = function (data, dataNull) {
+	pageSum = dataNull ? 0 : getNum(data, "page");
+	fetch(addrGet, { DB: "files_system", PARENT_FOLDER: parentFolder }, getFirstFolders);
 }
-var getFirstFolders = function (data) {
-	folderSum = getNum(data, "folder");
+var getFirstFolders = function (data, dataNull) {
+	folderSum = dataNull ? 0 : getNum(data, "folder");
 	render(firstLayerSort);
+}
+// 更新右侧类别数据
+var updateClass = function () {
+	_classNum[0].innerHTML = pageSum + folderSum;
+	_classNum[1].innerHTML = folderSum;
 }
 // 页面加载完毕后的js操作
 var doSomething = function () {
 
 	console.log("do something!");
 	// do some thing after render!
-	$(".class_num")[0].innerHTML = pageSum + folderSum;
-	$(".class_num")[1].innerHTML = folderSum;
+	updateClass();
 
 
 
 	console.log("render over!");
+	console.timeEnd('testForEach');
 }
 
-fetch(addrGet, { db: "sites_construction" }, getFirstPages);
+fetch(addrGet, { DB: "sites_construction", PARENT_FOLDER: parentFolder }, getFirstPages);
 
 _document.click(function(event){
 	if(!_createFolder.is(event.target) && _tip.has(event.target).length === 0 || _createLabel.is(event.target)){
