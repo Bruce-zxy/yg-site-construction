@@ -12,7 +12,7 @@ var startdrag = 0;
 var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
-var address = "http://localhost/yg-site-construction/edit.php";
+var address = "http://www.zhuxiaoyi.com/yg-site-construction/edit.php";
 
 if (url.indexOf("?") != -1) {　　
     var str = url.substr(1)　 //去掉?号

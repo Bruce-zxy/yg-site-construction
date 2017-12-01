@@ -30,7 +30,6 @@ class DB
 
     public function find($sql)
     {
-
         $result = mysqli_query($this->conn, $sql);
 
         $row = mysqli_fetch_assoc($result);

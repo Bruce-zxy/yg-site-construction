@@ -12,10 +12,12 @@ unset($param["ACTION"]);
 
 function addData($myDB)
 {
-    global $response, $result, $param;
+    global $response, $result, $param, $db_form;
     $result = $myDB->add($param);
     if ($result) {
-        $response["content"] = "success";
+        $create_time = $_REQUEST["CREATE_TIME"];
+        $result = $myDB->find("SELECT ID FROM $db_form WHERE CREATE_TIME='$create_time'");
+        $response["id"] = $result["ID"];
     } else {
         $response["error"] = "未添加进数据库！";
     }

@@ -1,5 +1,5 @@
-var addrGet = "http://localhost/yg-site-construction/getAll.php";
-var addrSend = "http://localhost/yg-site-construction/createFolder.php";
+var addrGet = "http://www.zhuxiaoyi.com/yg-site-construction/getAll.php";
+var addrSend = "http://www.zhuxiaoyi.com/yg-site-construction/createFolder.php";
 var _createForm = $(".create_form");
 var _createFolder = $('.create_folder');
 var _createLabel = $(".tips .name label");
@@ -96,7 +96,6 @@ var createFolder = function () {
 		PARENT_FOLDER: presentFolder,
 		ACTION: "add",
 	};
-	$(".form_part").prepend(folderSystem(editColor, editIcon, folderName, true));
 	$.ajax({
 	    type: "post",
 	    url: addrSend,
@@ -106,7 +105,8 @@ var createFolder = function () {
 	        data = JSON.parse(data);
 	        if(typeof(data) === 'object'){
 	        	console.log(data);
-	        	
+	        	$(".form_part").prepend(folderSystem(editColor, editIcon, folderName, true, data.id));
+	        	$(".form_folder a")[0].onclick = deepFolder;
 	        } else {
 	        	alert('服务器返回参数错误！');
 	        }
@@ -135,7 +135,6 @@ var getNum = function (data, classify) {
 }
 // 遍历返回数组
 var traversingData = function (data) {
-	console.log(firstLayerSort);
     for (var i = 0; i < data.length; i++) 
     	firstLayerSort.push(data[i]);
 }
@@ -178,15 +177,13 @@ var renderOver = function (state) {
 }
 // 获取数据
 var fetch = function (url, data, func) {
-	var getFolder = data.parentFolder;
+	var getFolder = data.PARENT_FOLDER;
 	$.ajax({
 	    type: "post",
 	    url: url,
 	    data: data,
 	    success: function(data) {
-	    	console.log(data);
 	        data = JSON.parse(data);
-	        console.log(data);
 	        typeof(data) === 'object' ? func ? func(data, data.length === 0, getFolder) : console.log(data) : alert('服务器返回参数错误或未找到数据！');
 	    },
 	    error: function(a, b) {
@@ -200,8 +197,6 @@ var getFirstPages = function (data, dataNull, getFolder) {
 }
 var getFirstFolders = function (data, dataNull) {
 	folderSum = dataNull ? 0 : getNum(data, "folder");
-	console.log(firstLayerSort.length);
-	console.log(firstLayerSort);
 	$(".form_part").html("");
 	firstLayerSort.length ? render(firstLayerSort) : null;
 }
@@ -214,34 +209,33 @@ var updateClass = function () {
 var deepFolder = function () {
 	var deepName = $(this).find(".folder p:first-child")[0].innerText;
 	parentFolder = this.getAttribute("data-folder");
-	sessionStorage.setItem("presentFolder", parentFolder);
 	_nav.append('<span>><a href="javascript:;" data-folder="'+parentFolder+'">'+deepName+'</a></span>')
 	navLink();
-	sessionStorage.setItem("presentPath", _nav.html());
+	saveTemp(parentFolder, _nav);
 	fetch(addrGet, { DB: "sites_construction", PARENT_FOLDER: parentFolder }, getFirstPages);
 }
 // 导航栏添加点击事件
 var navLink = function () {
 	_nav.find('a').map(function () {
 		this.onclick = function () {
+			var folderNum = this.getAttribute("data-folder");
 			$(this).parent().nextAll().remove();
-			fetch(addrGet, { DB: "sites_construction", PARENT_FOLDER: this.getAttribute("data-folder") }, getFirstPages);
+			fetch(addrGet, { DB: "sites_construction", PARENT_FOLDER: folderNum }, getFirstPages);
+			saveTemp(folderNum, _nav);
 		}
 	});
 }
 // 每次页面重新请求并加载完毕后的js操作
 var doSomething = function () {
-
-	console.log("do something!");
 	// do some thing after render!
 	updateClass();
 	_formFolder = $(".form_folder a");
 	_formFolder.click(deepFolder);
+}
 
-
-
-	console.log("render over!");
-	console.timeEnd('testForEach');
+var saveTemp = function (parentFolder, _nav) {
+	sessionStorage.setItem("presentFolder", parentFolder);
+	sessionStorage.setItem("presentPath", _nav.html());
 }
 
 parentFolder = presentFolder || parentFolder;
