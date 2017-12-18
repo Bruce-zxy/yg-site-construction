@@ -12,7 +12,7 @@ var startdrag = 0;
 var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
-var address = "http://www.zhuxiaoyi.com/yg-site-construction/edit.php";
+var address = "http://localhost/yg-site-construction/edit.php";
 
 if (url.indexOf("?") != -1) {　　
     var str = url.substr(1)　 //去掉?号
@@ -253,6 +253,8 @@ function downloadLayoutSrc() {
     var e = "";
     $("#download-layout").children().html($(".demo").html());
     var t = $("#download-layout").children();
+    var tHTML = t.html();
+    var tHTML = $("#download-layout").html();
     t.find(".preview, .configuration, .drag, .remove").remove();
     t.find(".lyrow").addClass("removeClean");
     t.find(".box-element").addClass("removeClean");
@@ -296,11 +298,10 @@ function downloadLayoutSrc() {
             ["data-slide"]
         ]
     });
-    console.log(formatSrc);
     // $("#download-layout").html(formatSrc);
     // $("#downloadModal textarea").empty();
     // $("#downloadModal textarea").val(formatSrc)
-    return formatSrc;
+    return [formatSrc, tHTML];
 }
 
 function undoLayout() {

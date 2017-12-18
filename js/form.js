@@ -1,5 +1,5 @@
-var addrGet = "http://www.zhuxiaoyi.com/yg-site-construction/getAll.php";
-var addrSend = "http://www.zhuxiaoyi.com/yg-site-construction/createFolder.php";
+var addrGet = "http://localhost/yg-site-construction/getAll.php";
+var addrSend = "http://localhost/yg-site-construction/createFolder.php";
 var _createForm = $(".create_form");
 var _createFolder = $('.create_folder');
 var _createLabel = $(".tips .name label");
