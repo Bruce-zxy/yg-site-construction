@@ -430,9 +430,10 @@ $(document).ready(function() {
     });
     $("[data-target=#shareModal]").click(function(e) {
         e.preventDefault();
+        console.log(layoutName);
         var datas = {
             name: layoutName,
-            content: $.base64.btoa(downloadLayoutSrc())
+            content: $.base64.btoa(downloadLayoutSrc()[0])
         }
         $.ajax({
             type: "post",
@@ -458,7 +459,7 @@ $(document).ready(function() {
         handleSaveLayout();
         var datas = {
             name: layoutName,
-            content: $.base64.btoa(downloadLayoutSrc())
+            content: $.base64.btoa(downloadLayoutSrc()[0])
         }
         $.ajax({
             type: "post",
