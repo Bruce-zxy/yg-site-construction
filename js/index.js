@@ -35,6 +35,8 @@ function getContent(pageName) {
             if(typeof(data) !== 'object') {
                 alert('服务器返回参数错误！')
             } else {
+                console.log('打开页面获取的内容：');
+                console.log(data);
                 $(".demo").html($.base64.atob(data.content_origin));
             }
         },
@@ -163,7 +165,6 @@ function saveLayout() {
         localStorage.setItem("layoutdata", JSON.stringify(data));
     }
     layouthistory = data;
-    console.log(data);
 }
 
 function handleJsIds() {
@@ -445,8 +446,10 @@ $(document).ready(function() {
                 if(typeof(data) !== 'object') {
                     alert('服务器返回参数错误！')
                 } else {
-                    data.content ? $('.output').html($.base64.atob(data.content)) : alert(data.error);
-                    console.log(data.content ? data : data.error);
+                    // data.content ? $('.output').html($.base64.atob(data.content)) : alert(data.error);
+                    // console.log(data.content ? data.content : data.error);
+                    console.log('保存页面获取的内容：');
+                    console.log(data);
                 }
             },
             error: function(a, b) {
