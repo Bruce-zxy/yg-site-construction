@@ -13,29 +13,29 @@ function findContent($mydb, $name)
 {
     return $mydb->find("SELECT content,content_origin FROM sites_construction WHERE name='$name'");
 }
-// function error($result, $msg)
-// {
-//     $result['content'] = null;
-//     $result['error'] = $msg;
-//     return $result;
-// }
+function error($result, $msg)
+{
+    $result['content'] = null;
+    $result['error'] = $msg;
+    return $result;
+}
 
-// if (empty($_REQUEST['name'])) {
-//     $result = error($result, "您未输入页面名！");
-// } else {
-$result = findContent($mydb, $name);
-//     if (!empty($result['content'])) {
-//         if ($result['content'] === $content) {
-//             $result = error($result, "您未做任何修改！");
-//         } else {
-//             $updateResult = $mydb->update($_REQUEST, "name='$name'");
-//             $result = $updateResult ? findContent($mydb, $name) : error($result, '页面更新出错！');
-//         }
-//     } else {
-//         $addResult = $mydb->add($_REQUEST);
-//         $result = $addResult ? findContent($mydb, $name) : error($result, '页面保存出错！');
-//     }
-// }
+if (empty($_REQUEST['name'])) {
+    $result = error($result, "您未输入页面名！");
+} else {
+    $result = findContent($mydb, $name);
+    if (!empty($result['content'])) {
+        if ($result['content'] === $content) {
+            $result = error($result, "您未做任何修改！");
+        } else {
+            $updateResult = $mydb->update($_REQUEST, "name='$name'");
+            $result = $updateResult ? findContent($mydb, $name) : error($result, '页面更新出错！');
+        }
+    } else {
+        $addResult = $mydb->add($_REQUEST);
+        $result = $addResult ? findContent($mydb, $name) : error($result, '页面保存出错！');
+    }
+}
 
 // $head = '<!DOCTYPE html>
 // <html lang="en">

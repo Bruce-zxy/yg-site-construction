@@ -14,17 +14,20 @@ var currenteditor = null;
 var layoutName = null;
 var address = "http://localhost/yg-site-construction/edit.php";
 
-if (url.indexOf("?") != -1) {　　
-    var str = url.substr(1)　 //去掉?号
-        　　 strs = str.split("&");　　
-    for (var i = 0; i < strs.length; i++)　　 {
-        Request[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);　　
+
+(function () {
+    if (url.indexOf("?") != -1) {　　
+        var str = url.substr(1)　 //去掉?号
+            　　 strs = str.split("&");　　
+        for (var i = 0; i < strs.length; i++)　　 {
+            Request[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);　　
+        }
     }
-}
-if(Request["name"]) {
-    layoutName = Request["name"];
-    getContent(layoutName);
-}
+    if(Request["name"]) {
+        layoutName = Request["name"];
+        getContent(layoutName);
+    }
+})();
 function getContent(pageName) {
     $.ajax({
         type: "post",
@@ -38,6 +41,7 @@ function getContent(pageName) {
                 console.log('打开页面获取的内容：');
                 console.log(data);
                 $(".demo").html($.base64.atob(data.content_origin));
+                initContainer();
             }
         },
         error: function(a, b) {
@@ -90,6 +94,19 @@ function initContainer() {
             startdrag = 0;
         }
     });
+    $(".demo .column").sortable({
+        opacity: .35,
+        connectWith: ".column",
+        start: function(e, t) {
+            if (!startdrag) stopsave++;
+            startdrag = 1;
+        },
+        stop: function(e, t) {
+            if (stopsave > 0) stopsave--;
+            startdrag = 0;
+        }
+    });
+    
     configurationElm();
 }
 
@@ -254,8 +271,7 @@ function downloadLayoutSrc() {
     var e = "";
     $("#download-layout").children().html($(".demo").html());
     var t = $("#download-layout").children();
-    var tHTML = t.html();
-    var tHTML = $("#download-layout").html();
+    var tHTML = $(".demo").html();
     t.find(".preview, .configuration, .drag, .remove").remove();
     t.find(".lyrow").addClass("removeClean");
     t.find(".box-element").addClass("removeClean");
