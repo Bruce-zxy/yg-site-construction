@@ -12,7 +12,10 @@ var startdrag = 0;
 var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
-var address = "http://localhost/yg-site-construction/edit.php";
+var parentFolder = 0;
+var address = "http://192.168.1.77/yg-site-construction/edit.php";
+var addressImg = "http://192.168.1.77/yg-site-construction/imgList.php";
+var imgList = [];
 
 
 (function () {
@@ -26,6 +29,9 @@ var address = "http://localhost/yg-site-construction/edit.php";
     if(Request["name"]) {
         layoutName = Request["name"];
         getContent(layoutName);
+    }
+    if(Request["parent_folder"]) {
+        parentFolder = Request["parent_folder"];
     }
 })();
 function getContent(pageName) {
@@ -315,9 +321,10 @@ function downloadLayoutSrc() {
             ["data-slide"]
         ]
     });
-    // $("#download-layout").html(formatSrc);
-    // $("#downloadModal textarea").empty();
-    // $("#downloadModal textarea").val(formatSrc)
+    $("#download-layout").html(formatSrc);
+    $("#downloadModal textarea").empty();
+    $("#downloadModal textarea").val(formatSrc);
+    console.log(formatSrc);
     return [formatSrc, tHTML];
 }
 
@@ -369,6 +376,31 @@ function redoLayout() {
         }
     });*/
 }
+
+(function () {
+    $.ajax({
+        type: "post",
+        url: addressImg,
+        success: function(data) {
+            imgs = JSON.parse(data);
+            var docfrag = document.createDocumentFragment();
+            for (i in imgs) {
+                var LI1 = document.createElement('li');
+                LI1.className = "";
+                var A1 = document.createElement('a');
+                A1.href = "#";
+                A1.rel = imgs[i].name;
+                LI1.appendChild(A1);
+                docfrag.appendChild(LI1);
+                $('ul[data-rol=img_click]').append(docfrag);
+                imgList.push(imgs[i].name);
+            }
+        },
+        error: function(a, b) {
+            alert('向服务器请求数据失败！');
+        }
+    });
+})();
 
 $(document).ready(function() {
     CKEDITOR.disableAutoInline = true;
@@ -448,10 +480,14 @@ $(document).ready(function() {
     $("[data-target=#shareModal]").click(function(e) {
         e.preventDefault();
         console.log(layoutName);
+        var date = new Date().getTime();
         var datas = {
             name: layoutName,
             content: $.base64.btoa(downloadLayoutSrc()[0]),
-            content_origin: $.base64.btoa(downloadLayoutSrc()[1])
+            content_origin: $.base64.btoa(downloadLayoutSrc()[1]),
+            parent_folder: parentFolder,
+            create_time: date,
+            classify: 'color-'+Math.floor(Math.random()*6)+',icon-user'
         }
         $.ajax({
             type: "post",
@@ -477,10 +513,14 @@ $(document).ready(function() {
     $("[data-target=#layoutModal]").click(function(e) {
         e.preventDefault();
         handleSaveLayout();
+        var date = new Date().getTime();
         var datas = {
             name: layoutName,
             content: $.base64.btoa(downloadLayoutSrc()[0]),
-            content_origin: $.base64.btoa(downloadLayoutSrc()[1])
+            content_origin: $.base64.btoa(downloadLayoutSrc()[1]),
+            parent_folder: parentFolder,
+            create_time: date,
+            classify: 'color-'+Math.floor(Math.random()*5 + 1)+',icon-user'
         }
         $.ajax({
             type: "post",
@@ -491,7 +531,7 @@ $(document).ready(function() {
                 if(typeof(data) !== 'object') {
                     alert('服务器返回参数错误！')
                 } else {
-                    window.location.href = "/yg-site-construction/test.html?name="+layoutName;
+                    window.location.href = "./test.html?name="+layoutName;
                 }
             },
             error: function(a, b) {

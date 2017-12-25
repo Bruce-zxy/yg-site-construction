@@ -1,5 +1,5 @@
-var addrGet = "http://localhost/yg-site-construction/getAll.php";
-var addrSend = "http://localhost/yg-site-construction/createFolder.php";
+var addrGet = "http://192.168.1.77/yg-site-construction/getAll.php";
+var addrSend = "http://192.168.1.77/yg-site-construction/createFolder.php";
 var _createForm = $(".create_form");
 var _createFolder = $('.create_folder');
 var _createLabel = $(".tips .name label");
@@ -82,7 +82,7 @@ var iconsBG = function () {
 }
 // 创建新页面
 var createForm = function () {
-	window.location.href = "./edit.html";
+	window.location.href = "./edit.html?parent_folder="+parentFolder;
 }
 // 创建文件夹
 var createFolder = function () {
@@ -211,6 +211,7 @@ var deepFolder = function () {
 	parentFolder = this.getAttribute("data-folder");
 	_nav.append('<span>><a href="javascript:;" data-folder="'+parentFolder+'">'+deepName+'</a></span>')
 	navLink();
+	presentFolder = parentFolder;
 	saveTemp(parentFolder, _nav);
 	fetch(addrGet, { DB: "sites_construction", PARENT_FOLDER: parentFolder }, getFirstPages);
 }
@@ -221,6 +222,7 @@ var navLink = function () {
 			var folderNum = this.getAttribute("data-folder");
 			$(this).parent().nextAll().remove();
 			fetch(addrGet, { DB: "sites_construction", PARENT_FOLDER: folderNum }, getFirstPages);
+			presentFolder = folderNum;
 			saveTemp(folderNum, _nav);
 		}
 	});

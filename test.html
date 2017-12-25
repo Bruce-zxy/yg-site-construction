@@ -43,7 +43,6 @@
 		!window.atob ? window.atob = $.base64.atob : null
 		$.base64.utf8encode = true;
 		$.base64.utf8decode = true;
-
 		function getContent(pageName) {
 			$.ajax({
 			    type: "post",
@@ -63,7 +62,6 @@
 			    }
 			});
 		}
-
 		var url = location.search;
 		var Request = new Object();
 		if (url.indexOf("?") != -1) {　　
@@ -76,9 +74,7 @@
 	</script>
 </head>
 <!------分------割------线------>
-
 <body>
-
 	<div class="mask">
 	    <div class="input_name">
 	        <label for="#">请输入要显示的页面名称：</label>
@@ -86,11 +82,8 @@
 	        <a href="javascript:;" class="openLayoutName">打开</a>
 	    </div>
 	</div>
-
 </body>
-
 <script type="text/javascript">
-
 	var pageName = null;
 	var address = "http://localhost/yg-site-construction/edit.php";
 	if(Request["name"]) {
