@@ -13,8 +13,9 @@ var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
 var parentFolder = 0;
-var address = "http://192.168.1.77/yg-site-construction/edit.php";
-var addressImg = "http://192.168.1.77/yg-site-construction/imgList.php";
+var host = "192.168.1.77";
+var address = "http://" + host + "/yg-site-construction/edit.php";
+var addressImg = "http://" + host + "/yg-site-construction/imgList.php";
 var imgList = [];
 
 
@@ -389,18 +390,27 @@ function redoLayout() {
                 LI1.className = "";
                 var A1 = document.createElement('a');
                 A1.href = "#";
-                A1.rel = imgs[i].name;
+                A1.rel = "http://"+host+"/yg-site-construction/img/"+imgs[i].name;
+                A1.textContent = imgs[i].name;
                 LI1.appendChild(A1);
                 docfrag.appendChild(LI1);
                 $('ul[data-rol=img_click]').append(docfrag);
                 imgList.push(imgs[i].name);
             }
+            imgClick();
         },
         error: function(a, b) {
             alert('向服务器请求数据失败！');
         }
     });
 })();
+
+function imgClick() {
+    $('ul[data-rol=img_click] li a').click(function () {
+        $(this).parent().parent().parent().parent().parent().find('img').attr('src', this.getAttribute("rel"));
+        console.log($(this).parent().parent().parent().parent().parent().find('img').attr('src'));
+    });
+}
 
 $(document).ready(function() {
     CKEDITOR.disableAutoInline = true;
@@ -460,6 +470,8 @@ $(document).ready(function() {
             handleJsIds();
             if (stopsave > 0) stopsave--;
             startdrag = 0;
+            console.log(this);
+            imgClick();
         }
     });
     initContainer();
