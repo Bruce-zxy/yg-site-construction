@@ -14,7 +14,7 @@ var currenteditor = null;
 var layoutName = null;
 var parentFolder = 0;
 var host = "192.168.1.77";
-var address = "http://" + host + "/yg-site-construction/edit.php";
+var address = "http://" + host + ":3000/users";
 var addressImg = "http://" + host + "/yg-site-construction/imgList.php";
 var imgList = [];
 
@@ -325,7 +325,6 @@ function downloadLayoutSrc() {
     $("#download-layout").html(formatSrc);
     $("#downloadModal textarea").empty();
     $("#downloadModal textarea").val(formatSrc);
-    console.log(formatSrc);
     return [formatSrc, tHTML];
 }
 
@@ -506,7 +505,8 @@ $(document).ready(function() {
             url: address,
             data: datas,
             success: function(data) {
-                data = JSON.parse(data);
+                console.log(data);
+                // data = JSON.parse(data);
                 if(typeof(data) !== 'object') {
                     alert('服务器返回参数错误！')
                 } else {
