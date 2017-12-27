@@ -506,7 +506,7 @@ $(document).ready(function() {
             data: datas,
             success: function(data) {
                 console.log(data);
-                // data = JSON.parse(data);
+                data = JSON.parse(data);
                 if(typeof(data) !== 'object') {
                     alert('服务器返回参数错误！')
                 } else {
