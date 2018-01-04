@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes');
-var users = require('./routes/user');
+var conn = require('./routes/conn');
 
 var app = express();
 
@@ -34,7 +34,7 @@ app.all('*', function(req, res, next) {
 });
 
 app.get('/', routes.index);
-app.post('/users', users.list);
+app.post('/conn', conn.db);
 
 
 
