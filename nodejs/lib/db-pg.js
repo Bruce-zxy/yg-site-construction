@@ -31,7 +31,7 @@ pool.connect(function(err, client, done) {
         if (err) {
             return console.error('查询出错', err);
         }
-        console.log(result.rows); //output: Hello World
+        // console.log(result.rows); //output: Hello World
         // res.send(result.rows);
     });
 });

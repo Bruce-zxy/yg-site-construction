@@ -1,6 +1,25 @@
 var DB_MYSQL = require('../lib/db-mysql');
 var DB_PG = require('../lib/db-pg');
 var pg = require('pg');
+// var spawn = require('child_process').spawn;
+
+
+// free = spawn("cd", ['D:\\']);
+// // 捕获标准输出并将其打印到控制台 
+// free.stdout.on('data', function(data) {
+//     console.log('standard output:\n' + data);
+// });
+
+// // 捕获标准错误输出并将其打印到控制台 
+// free.stderr.on('data', function(data) {
+//     console.log('standard error output:\n' + data);
+// });
+
+// // 注册子进程关闭事件 
+// free.on('exit', function(code, signal) {
+//     console.log('child process eixt ,exit:' + code);
+// });
+
 
 /* POST conn listing. */
 exports.db = function(req, res){
@@ -76,11 +95,13 @@ exports.db = function(req, res){
     //         text: 'SELECT * FROM user WHERE id = $1',
     //         values: [1]
     //     }
-        pool.query('SELECT db_users_children()', function(err, result) {
+        pool.query('SELECT * from db_users_children()', function(err, result) {
             // done(); // 释放连接（将其返回给连接池）
             if (err) {
                 return console.error('查询出错', err);
             }
+            result = new Object(result);
+            console.log(result.rows);
             res.send(result.rows);
         });
     // });
