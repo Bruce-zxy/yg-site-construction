@@ -1,8 +1,17 @@
+-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+-- GBK encoding
+-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+DROP TABLE IF EXISTS files_system;
+DROP TABLE IF EXISTS sites_construction;
+DROP SEQUENCE IF EXISTS files_id_seq;
+DROP SEQUENCE IF EXISTS site_id_seq;
+
 CREATE TABLE files_system (
   ID SERIAL PRIMARY KEY,
   TYPE text,
   NAME text,
-  PARENT_FOLDER int(20),
+  PARENT_FOLDER int,
   PUBLISH_URI text,
   CLASSIFY text,
   CREATE_TIME text

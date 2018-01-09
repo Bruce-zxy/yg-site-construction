@@ -33,8 +33,9 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-app.get('/', routes.index);
 app.post('/conn', conn.db);
+app.post('/getAll', routes.getAll);
+app.post('/createFolder', routes.createFolder);
 
 
 

@@ -64,12 +64,14 @@ var DB_PG = require('../lib/db-pg');
 /* POST conn listing. */
 exports.db = function(req, res){
 
-    var test = 'test';
-    var db = new DB_PG();
-    db.connect()('SELECT * from db_users_children()', func, res);
-
-    function func(err, result) {
-        console.log(test);
-    }
+    // 自定义回调函数（可选，但必须包含res.send）
+    // res.func = function (err, result) {
+    //     // some code...
+        
+    //     res.send(result);
+    // }
+    // 
+    var db = new DB_PG('cms', 'sites_construction');
+    db.connect().insert(req.body, res);
     
 };
