@@ -5,10 +5,13 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mutipart= require('connect-multiparty');
+var mutipartMiddeware = mutipart();
 
 var routes = require('./routes');
 var conn = require('./routes/conn');
-var fileUpload = require('./routes/fileUpload');
+var imgUpload = require('./routes/imgUpload');
+var imgList = require('./routes/imgList');
 
 var app = express();
 
@@ -23,7 +26,7 @@ app.use(bodyParser.json());
 // URL解码
 app.use(bodyParser.urlencoded({ extended: true }));
 // 上传文件解析
-app.use(express.bodyParser({ uploadDir: "../imgTemp" }));
+app.use(mutipart({ uploadDir: "../albumTemp" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
@@ -40,9 +43,12 @@ app.all('*', function(req, res, next) {
 
 app.post('/conn', conn.db);
 app.post('/edit', routes.edit);
+app.post('/save', routes.save);
+app.post('/delete', routes.del);
 app.post('/getAll', routes.getAll);
 app.post('/createFolder', routes.createFolder);
-app.post('/fileUpload', fileUpload.imgUpload);
+app.post('/imgUpload', mutipartMiddeware, imgUpload.imgUpload);
+app.post('/imgList', imgList.imgList);
 
 
 

@@ -13,16 +13,16 @@ var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
 var parentFolder = 0;
-var host = "192.168.1.77";
-var address = "http://" + host + ":3000/users";
-var addressImg = "http://" + host + "/yg-site-construction/imgList.php";
+var host = "localhost:3000";
+var address = "http://" + host + "/edit";
+var addressImg = "http://" + host + "/imgList";
 var imgList = [];
 
 
 (function () {
     if (url.indexOf("?") != -1) {　　
         var str = url.substr(1)　 //去掉?号
-            　　 strs = str.split("&");　　
+        strs = str.split("&");
         for (var i = 0; i < strs.length; i++)　　 {
             Request[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);　　
         }
