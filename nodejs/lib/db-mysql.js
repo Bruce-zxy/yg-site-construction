@@ -9,26 +9,24 @@ var mysql = require("mysql");
  * @param    {String}                 table  [需要操作的数据表名称]
  * @param    {Object}                 others [域名host,用户名user,密码password,端口port]
  */
-function DB_MYSQL(db, table, others) {
+var DB_MYSQL = (db, table, others) => {
 
     this._DATABASE = db;
     this._TABLE = table;
     this._OTHERS = others || {};
-    this.connect = function() {
-        return mysql.createConnection({
-            host: this._OTHERS.host || "localhost",
-            user: this._OTHERS.user || "root",
-            password: this._OTHERS.password || "19950224",
-            database: this._DATABASE,
-            port: this._OTHERS.port || 3306
-        });
-    };
-    this.query = function(SQL, res) {
+    this.connect = () => mysql.createConnection({
+        host: this._OTHERS.host || "localhost",
+        user: this._OTHERS.user || "root",
+        password: this._OTHERS.password || "19950224",
+        database: this._DATABASE,
+        port: this._OTHERS.port || 3306
+    });
+    this.query = (SQL, res) => {
         var client = this.connect();
         client.connect();
         client.query(
             SQL,
-            function selectCb(err, results, fields) {
+            (err, results, fields) => {
                 if (err) {
                     throw err;
                 }
@@ -39,7 +37,7 @@ function DB_MYSQL(db, table, others) {
             }
         );
     };
-    this.getVal = function(datas) {
+    this.getVal = (datas) => {
         var temp = "";
         for (i in datas) {
             temp += i + "='" + datas[i] + "',";
@@ -47,10 +45,9 @@ function DB_MYSQL(db, table, others) {
         return temp.slice(0, -1);
     }
 
-    this.insert = function(datas, res) {
-        this.query("INSERT INTO " + this._TABLE + " SET " + this.getVal(datas), res);
-    };
-    this.select = function(find, where, res) {
+    this.insert = (datas, res) => this.query("INSERT INTO " + this._TABLE + " SET " + this.getVal(datas), res);
+    this.update = (datas, where, res) => this.query("UPDATE " + this._TABLE + " SET " + this.getVal(datas) + " WHERE " + getVal(where), res);
+    this.select = (find, where, res) => {
         var SQL = "";
         var arg = arguments;
         switch (arg.length) {
@@ -62,12 +59,12 @@ function DB_MYSQL(db, table, others) {
                 if (typeof arg[0] === 'string') {
                     SQL += "SELECT " + arg[0] + " FROM " + this._TABLE;
                 } else {
-                    SQL += "SELECT * FROM " + this._TABLE + " WHERE " + arg[0];
+                    SQL += "SELECT * FROM " + this._TABLE + " WHERE " + getVal(arg[0]);
                 }
                 this.query(SQL, arg[1]);
                 break;
             case 3:
-                SQL += "SELECT " + arg[0] + " FROM " + this._TABLE + " WHERE " + arg[1];
+                SQL += "SELECT " + arg[0] + " FROM " + this._TABLE + " WHERE " + getVal(arg[1]);
                 this.query(SQL, arg[2]);
                 break;
             default:
@@ -76,19 +73,15 @@ function DB_MYSQL(db, table, others) {
                 break;
         }
     };
-    this.delete = function(where, res) {
+    this.delete = (where, res) => {
         var SQL = "DELETE FROM " + this._TABLE;
         var arg = arguments;
         if (arg.length === 1) {
             this.query(SQL, arg[0])
         } else if (arg.length === 2) {
-            SQL += " WHERE " + where;
+            SQL += " WHERE " + getVal(where);
             this.query(SQL, arg[1])
         }
-    };
-    this.update = function(datas, where, res) {
-        var SQL = "UPDATE " + this._TABLE + " SET " + this.getVal(datas) + " WHERE " + where;
-        this.query(SQL, res);
     };
 };
 

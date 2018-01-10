@@ -14,8 +14,9 @@ var pg = require('pg');
  *  ③ update：   db.connect().update({ cpath: "业务线.零售.景区.个体户" }, { id: 1000003 }, res);
  *  ④ delete：   db.connect().delete({ id: 1000001 }, res);
  *  ⑤ insert：   db.connect().insert({ "category": "MD-BL", "id":1000002, "path": "BizLine.Retail.Resort", cpath: "业务线.零售.景区.个体户" }, res);
+ *  ⑥ get：      db.connect().get("SELECT * FROM func()").then(function(result) { // some code });
  */
-function DB_PG(db, table, others) {
+var DB_PG = (db, table, others) => {
 	this._DATABASE = db;
 	this._TABLE = table;
 	this._OTHERS = others || {};
@@ -30,7 +31,7 @@ function DB_PG(db, table, others) {
 	    max: 20, // 连接池最大连接数
 	    idleTimeoutMillis: 3000, // 连接最大空闲时间 3s
 	}
-    this.connect = function () {
+    this.connect = () => {
         this._POOL = new pg.Pool(this._CONFIG);
         return {
             insert: this.insert.bind(this),
@@ -40,8 +41,8 @@ function DB_PG(db, table, others) {
             get: this.get.bind(this)
         }
     }
-    this.query = function (SQL, res) {
-        this._POOL.query(SQL, function(err, result) {
+    this.query = (SQL, res) => {
+        this._POOL.query(SQL, (err, result) => {
             done();
             if (err) {
                 res.send(err);
@@ -50,15 +51,13 @@ function DB_PG(db, table, others) {
             }
         });
     }
-    this.get = function(SQL) {
-        return this._POOL.query(SQL);
-    }
-    this.getVal = function(datas) {
+    this.get = (SQL) => this._POOL.query(SQL);
+    this.getVal = (datas) => {
         var temp = "";
         for (i in datas) temp += i + "='" + datas[i] + "',";
         return temp.slice(0, -1);
     }
-    this.getInsertVal = function(datas, type) {
+    this.getInsertVal = (datas, type) => {
         var temp = " (";
         switch(type) {
             case 'key':
@@ -70,17 +69,16 @@ function DB_PG(db, table, others) {
         }
         return temp.slice(0, -2) + ")";
     }
-    this.getWhereVal = function(datas) {
+    this.getWhereVal = (datas) => {
         var temp = "";
         for (i in datas) temp += i + "='" + datas[i] + "' AND ";
         return temp.slice(0, -5);
     }
-    this.insert = function(datas, res) {
+    this.insert = (datas, res) => {
         var SQL = "INSERT INTO " + this._TABLE + this.getInsertVal(datas, 'key') + " VALUES " + this.getInsertVal(datas, 'val');
-        console.log(SQL);
         this.query(SQL, res);
     };
-    this.select = function(find, where, res) {
+    this.select = (find, where, res) => {
         var SQL = "";
         var arg = arguments;
         switch (arg.length) {
@@ -106,7 +104,7 @@ function DB_PG(db, table, others) {
                 break;
         }
     };
-    this.delete = function(where, res) {
+    this.delete = (where, res) => {
         var SQL = "DELETE FROM " + this._TABLE;
         var arg = arguments;
         if (arg.length === 1) {
@@ -116,7 +114,7 @@ function DB_PG(db, table, others) {
             this.query(SQL, arg[1]);
         }
     };
-    this.update = function(datas, where, res) {
+    this.update = (datas, where, res) => {
         var SQL = "UPDATE " + this._TABLE + " SET " + this.getVal(datas) + " WHERE " + this.getWhereVal(where);
         this.query(SQL, res);
     };
