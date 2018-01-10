@@ -42,6 +42,7 @@ function DB_PG(db, table, others) {
     }
     this.query = function (SQL, res) {
         this._POOL.query(SQL, function(err, result) {
+            done();
             if (err) {
                 res.send(err);
             } else {
@@ -76,6 +77,7 @@ function DB_PG(db, table, others) {
     }
     this.insert = function(datas, res) {
         var SQL = "INSERT INTO " + this._TABLE + this.getInsertVal(datas, 'key') + " VALUES " + this.getInsertVal(datas, 'val');
+        console.log(SQL);
         this.query(SQL, res);
     };
     this.select = function(find, where, res) {
@@ -111,7 +113,7 @@ function DB_PG(db, table, others) {
             this.query(SQL, arg[0])
         } else if (arg.length === 2) {
             SQL += " WHERE " + this.getWhereVal(where);
-            this.query(SQL, arg[1])
+            this.query(SQL, arg[1]);
         }
     };
     this.update = function(datas, where, res) {
