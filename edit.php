@@ -81,7 +81,7 @@ $foot = '
 <!------分------割------线------>
 </html>';
 
-$myfile = fopen(iconv("UTF-8", "GB2312", $name) . ".html", "w+") or die("Unable to open file!");
+$myfile = fopen("./public/" . iconv("UTF-8", "GB2312", $name) . ".html", "w+") or die("Unable to open file!");
 $txt = "Bill Gates\n";
 fwrite($myfile, $head);
 fwrite($myfile, base64_decode($result['content']));

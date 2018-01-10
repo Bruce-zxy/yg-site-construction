@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes');
 var conn = require('./routes/conn');
+var fileUpload = require('./routes/fileUpload');
 
 var app = express();
 
@@ -17,8 +18,12 @@ app.set('view engine', 'jade');
 
 app.use(favicon());
 app.use(logger('dev'));
+// JSON解析
 app.use(bodyParser.json());
+// URL解码
 app.use(bodyParser.urlencoded({ extended: true }));
+// 上传文件解析
+app.use(express.bodyParser({ uploadDir: "../imgTemp" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
@@ -34,8 +39,10 @@ app.all('*', function(req, res, next) {
 });
 
 app.post('/conn', conn.db);
+app.post('/edit', routes.edit);
 app.post('/getAll', routes.getAll);
 app.post('/createFolder', routes.createFolder);
+app.post('/fileUpload', fileUpload.imgUpload);
 
 
 
