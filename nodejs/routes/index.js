@@ -1,5 +1,6 @@
-var DB_PG = require('../lib/db-pg');
 var fs = require('fs');
+var crypto = require('crypto');
+var DB_PG = require('../lib/db-pg');
 
 /* POST listing */
 var getAll = (req, res) => {
@@ -44,6 +45,7 @@ var edit = (req, res) => {
     	if (result.rowCount) {
     	    result.rows[0].content === req.body.content ? error("您未做任何修改！") : db.connect().update(req.body, { name: name }, res);
     	} else {
+    		req.body.key_name = crypto.createHash('md5').update(req.body.name).digest('hex');
     	    addResult = db.connect().insert(req.body, res);
     	}
     }

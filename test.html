@@ -36,6 +36,52 @@
 		.mask .input_name label { display: inline-table; color: #999; }
 		.mask .input_name input { display: inline-table; height: 30px; margin: 0; }
 		.mask .input_name a { text-decoration: none;line-height: 40px; position: relative; left: 50%; display: block; width: 30%; height: 40px; margin: 20px 0 0 -15%; color: #EEE; border-radius: 10px; background-image: linear-gradient(to top, #09203F 0%, #537895 100%); }
+		.back-btn {
+			display: block;
+			position: fixed;
+			right: 20px;
+			bottom: 20px;
+			height: 50px;
+			line-height: 50px;
+			width: 50px;
+			text-align: center;
+			border-radius: 50%;
+			cursor: pointer;
+			text-decoration: none!important;
+			background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+		}
+		.back-btn span {
+			display: block;
+			position: relative;
+			top: -50px;
+			width: 80px;
+			height: 24px;
+			line-height: 24px;
+			border-radius: 10px;
+			margin-left: -15px;
+			background-color: transparent;
+			-webkit-animation: pop 2s ease-in-out infinite;
+			   -moz-animation: pop 2s ease-in-out infinite;
+			    -ms-animation: pop 2s ease-in-out infinite;
+			     -o-animation: pop 2s ease-in-out infinite;
+			        animation: pop 2s ease-in-out infinite;
+		}
+		.back-btn span:after {
+			content: '';
+			position: absolute;
+			top: 24px;
+			left: 30px;
+			border: 10px solid transparent;
+			border-top: 10px solid red;
+		}
+		@keyframes pop {
+			50% {
+				top: -60px;
+			}
+			100% {
+				top: -50px;
+			}
+		}
 		/*入口遮罩 End*/
     </style>
 	<script>
@@ -43,18 +89,21 @@
 		!window.atob ? window.atob = $.base64.atob : null
 		$.base64.utf8encode = true;
 		$.base64.utf8decode = true;
+		var pageName = null;
+		var host = "192.168.1.77";
+		var port = ":3000";
+		var address = "http://" + host + port + "/edit";
 		function getContent(pageName) {
 			$.ajax({
 			    type: "post",
 			    url: address,
 			    data: { name: pageName},
 			    success: function(data) {
-			        data = JSON.parse(data);
 			        if(typeof(data) !== 'object') {
 			            alert('服务器返回参数错误！')
 			        } else {
-			        	console.log(data)
-			            data.content ? $('body').html($.base64.atob(data.content)) : alert(data.error);
+			            data[0].content ? $('body').html($.base64.atob(data[0].content)) : alert(data.error);
+			            $('body').append(createBackBtn());
 			        }
 			    },
 			    error: function(a, b) {
@@ -62,12 +111,23 @@
 			    }
 			});
 		}
+		function createBackBtn() {
+			var docfrag = document.createDocumentFragment();
+			var A = document.createElement('a');
+			A.className = 'back-btn';
+			A.href = 'http://' + host + "/yg-site-construction/edit.html?name=" + Request["name"];
+			var SPAN = document.createElement('span');
+			SPAN.textContent = '点击返回';
+			A.appendChild(SPAN);
+			docfrag.appendChild(A);
+			return docfrag;
+		}
 		var url = location.search;
 		var Request = new Object();
 		if (url.indexOf("?") != -1) {　　
 		    var str = url.substr(1)　 //去掉?号
 		        　　 strs = str.split("&");　　
-		    for (var i = 0; i < strs.length; i++)　　 {
+		    for (var i = 0; i < strs.length; i++) {
 		        Request[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);　　
 		    }
 		}
@@ -84,8 +144,6 @@
 	</div>
 </body>
 <script type="text/javascript">
-	var pageName = null;
-	var address = "http://localhost/yg-site-construction/edit.php";
 	if(Request["name"]) {
 		pageName = Request["name"];
 		getContent(pageName)

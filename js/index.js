@@ -3,6 +3,10 @@
 $.base64.utf8encode = true;
 $.base64.utf8decode = true;
 
+var host = "192.168.1.77";
+var port = ":3000"
+var address = "http://" + host + port + "/edit";
+var addressImg = "http://" + host + port + "/imgList";
 var url = location.search;
 var Request = new Object();
 var currentDocument = null;
@@ -13,9 +17,6 @@ var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
 var parentFolder = 0;
-var host = "localhost:3000";
-var address = "http://" + host + "/edit";
-var addressImg = "http://" + host + "/imgList";
 var imgList = [];
 
 
@@ -39,16 +40,16 @@ function getContent(pageName) {
     $.ajax({
         type: "post",
         url: address,
-        data: { name: pageName},
+        data: { name: pageName },
         success: function(data) {
-            data = JSON.parse(data);
             if(typeof(data) !== 'object') {
                 alert('服务器返回参数错误！')
             } else {
                 console.log('打开页面获取的内容：');
                 console.log(data);
-                $(".demo").html($.base64.atob(data.content_origin));
+                $(".demo").html($.base64.atob(data[0].content_origin));
                 initContainer();
+                imgClick();
             }
         },
         error: function(a, b) {
@@ -381,15 +382,17 @@ function redoLayout() {
     $.ajax({
         type: "post",
         url: addressImg,
+        dataType:"json",
         success: function(data) {
-            imgs = JSON.parse(data);
+            imgs = data;
+            console.log(imgs);
             var docfrag = document.createDocumentFragment();
             for (i in imgs) {
                 var LI1 = document.createElement('li');
                 LI1.className = "";
                 var A1 = document.createElement('a');
                 A1.href = "#";
-                A1.rel = "http://"+host+"/yg-site-construction/img/"+imgs[i].name;
+                A1.rel = "http://"+host+"/yg-site-construction/album/"+imgs[i].name;
                 A1.textContent = imgs[i].name;
                 LI1.appendChild(A1);
                 docfrag.appendChild(LI1);
@@ -474,6 +477,7 @@ $(document).ready(function() {
         }
     });
     initContainer();
+    imgClick();
     $('body.edit .demo').on("click", "[data-target=#editorModal]", function(e) {
         e.preventDefault();
         currenteditor = $(this).parent().parent().find('.view');
@@ -505,8 +509,6 @@ $(document).ready(function() {
             url: address,
             data: datas,
             success: function(data) {
-                console.log(data);
-                data = JSON.parse(data);
                 if(typeof(data) !== 'object') {
                     alert('服务器返回参数错误！')
                 } else {
@@ -539,7 +541,6 @@ $(document).ready(function() {
             url: address,
             data: datas,
             success: function(data) {
-                data = JSON.parse(data);
                 if(typeof(data) !== 'object') {
                     alert('服务器返回参数错误！')
                 } else {

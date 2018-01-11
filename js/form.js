@@ -1,6 +1,7 @@
-var host = "localhost:3000";
-var addrGet = "http://" + host + "/getAll";
-var addrSend = "http://" + host + "/createFolder";
+var host = "192.168.1.77";
+var port = ":3000"
+var addrGet = "http://" + host + port +"/getAll";
+var addrSend = "http://" + host + port +"/createFolder";
 var _createForm = $(".create_form");
 var _createFolder = $('.create_folder');
 var _createLabel = $(".tips .name label");

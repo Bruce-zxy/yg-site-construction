@@ -35,7 +35,24 @@ span[size="40"] { font-size: 40px; }
 .container { max-width: 1020px; min-height: 700px; margin: 100px auto; padding: 0 10px; }
 .container>div { display: inline-block; float: left; }
 .container>p { width: 100%; height: 50px; background-color: #fff; line-height: 50px; box-sizing: border-box; position: relative; padding: 0 10px; border: 1px solid #ccc; }
-.container .icon-reorder { float: right; height: 100%; line-height: 48px; cursor: pointer; }
+.container .icon-reorder { float: right; height: 100%; line-height: 48px; cursor: pointer; text-align: right; width: 20px; }
+.container .icon-reorder a {
+	display: block;
+	height: 0px;
+	/*height: 30px;*/
+	opacity: 0;
+	position: relative;
+	top: 0px;
+	width: 80px;
+	
+	line-height: 30px;
+	font-size: 16px;
+	text-align: center;
+	right: 44px;
+	box-shadow: 1px 1px 4px #666;
+	background-color: #fff;
+	box-sizing: border-box;
+}
 /*表单容器 End*/
 /*表单主体 Start*/
 .form_body { width: 80%; padding: 10px 0 0; position: relative; }
