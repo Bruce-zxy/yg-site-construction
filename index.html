@@ -6,6 +6,9 @@
     <meta charset="UTF-8">
     <meta name="Author" content="Bruce Zhu">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>首页</title>
@@ -13,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="./css/form.css" />
     <script type="text/javascript" src="./js/jquery.min.js"></script>
     <script type="text/javascript" src="./js/jquery-ui.js"></script>
+    <script type="text/javascript" src="./js/jquery.base64.js"></script>
 	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
 		<script type="text/javascript" src="./js/html5shiv.js"></script>
@@ -26,12 +30,12 @@
 <body>
 
 	<div class="container">
-
 		<p class="navbar">
-			<span class="icon-reorder" size="20">
+			<i class="icon-reorder" size="20">
 				<a href="./imgUpload.html">上传图片</a>
-			</span>
-			<span><a href="javascript:;" data-folder="0">桌面</a></span></p>
+			</i>
+			<span><a href="javascript:;" data-folder="0">桌面</a></span>
+		</p>
 		<div class="form_body">
 			<div class="form_new">
 				<div class="create">
@@ -69,12 +73,29 @@
 				<li>未设置标签<span class="class_num">0</span></li>
 			</ul>
 		</div>
-
 	</div>
 
 </body>
 
 
 <script type="text/javascript" src="./js/form.js"></script>
+<script src="http://pv.sohu.com/cityjson"></script>
+<script src="https://cdn.logrocket.io/LogRocket.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+	window.LogRocket && window.LogRocket.init('nciere/cms-hckzh');
+	var bruce = 'bruce';
+	var zxy = 'zxy';
+	var name = `${bruce}${zxy}`;
+	// This is an example script - don't forget to change it!
+	LogRocket.identify('THE_USER_ID_IN_YOUR_APP', {
+	    name: name,
+	    email: 'bruce_zxy@163.com',
+
+	    // Add your own custom user variables here, ie:
+	    subscriptionType: 'pro'
+	});
+
+</script>
 <!------分------割------线------>
 </html>

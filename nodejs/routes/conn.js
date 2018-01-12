@@ -74,5 +74,7 @@ exports.db = function(req, res){
     process.on('uncaughtException', function() {
         console.log('捕获到一个异常');
     });
+
+    res.send(req.body);
     
 };

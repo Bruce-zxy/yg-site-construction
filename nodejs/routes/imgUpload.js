@@ -2,7 +2,7 @@ var fs = require('fs');
 
 /* POST listing */
 var imgUpload = (req, res) => {
-	var file = req.files.file;
+	var file = req.files.fileList;
 	var upload = (file) => {
 		// var words = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		// var now = new Date();
@@ -32,7 +32,7 @@ var imgUpload = (req, res) => {
 	            reason: '未接收到文件'
 	        }
 	    }
-		res.send(err);
+		res.send(req.files);
 		return err;
 	}
 	upload(file);

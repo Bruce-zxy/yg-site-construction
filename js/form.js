@@ -1,3 +1,8 @@
+!window.btoa ? window.btoa = $.base64.btoa : null
+!window.atob ? window.atob = $.base64.atob : null
+$.base64.utf8encode = true;
+$.base64.utf8decode = true;
+
 var host = "192.168.1.77";
 var port = ":3000"
 var addrGet = "http://" + host + port +"/getAll";
@@ -12,7 +17,7 @@ var _icons = $(".icons span");
 var _tip = $(".tips");
 var _classNum = $(".class_num");
 var _formFolder = $(".form_folder a");
-var _nav = $(".navbar");
+var _nav = $(".navbar span:last-child");
 var editColor = _colors.parent().find(".icon-ok")[0].className.split(" ")[0];
 var editIcon = $(".icons ."+editColor)[0].className.split(" ")[0];
 var presentFolder = sessionStorage.getItem("presentFolder");
@@ -186,7 +191,6 @@ var fetch = function (url, data, func) {
 	    data: data,
 	    success: function(data) {
 	        // data = JSON.parse(data);
-	        console.log(data);
 	        typeof(data) === 'object' ? func ? func(data, data.length === 0, getFolder) : console.log(data) : alert('服务器返回参数错误或未找到数据！');
 	    },
 	    error: function(a, b) {
@@ -212,7 +216,7 @@ var updateClass = function () {
 var deepFolder = function () {
 	var deepName = $(this).find(".folder p:first-child")[0].innerText;
 	parentFolder = this.getAttribute("data-folder");
-	_nav.append('<span>><a href="javascript:;" data-folder="'+parentFolder+'">'+deepName+'</a></span>')
+	_nav.parent().append('<span>><a href="javascript:;" data-folder="'+parentFolder+'">'+deepName+'</a></span>')
 	navLink();
 	presentFolder = parentFolder;
 	saveTemp(parentFolder, _nav);
@@ -220,7 +224,7 @@ var deepFolder = function () {
 }
 // 导航栏添加点击事件
 var navLink = function () {
-	_nav.find('a').map(function () {
+	_nav.parent().find('a').map(function () {
 		this.onclick = function () {
 			var folderNum = this.getAttribute("data-folder");
 			$(this).parent().nextAll().remove();
@@ -240,11 +244,11 @@ var doSomething = function () {
 
 var saveTemp = function (parentFolder, _nav) {
 	sessionStorage.setItem("presentFolder", parentFolder);
-	sessionStorage.setItem("presentPath", _nav.html());
+	sessionStorage.setItem("presentPath", _nav.parent().html());
 }
 
 parentFolder = presentFolder || parentFolder;
-presentPath ? _nav.html(presentPath) : null;
+presentPath ? _nav.html(presentPath) : 0;
 navLink();
 fetch(addrGet, { db: "sites_construction", parent_folder: parentFolder }, getFirstPages);
 _colors.click(colorsChange)
@@ -262,9 +266,5 @@ _document.click(function(event){
 		_tip.show(250);
 	}
 });
-
-
-
-
 
 
