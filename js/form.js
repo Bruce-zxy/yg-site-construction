@@ -248,7 +248,7 @@ var saveTemp = function (parentFolder, _nav) {
 }
 
 parentFolder = presentFolder || parentFolder;
-presentPath ? _nav.html(presentPath) : 0;
+presentPath !== "undefined" && presentPath ? _nav.html(presentPath) : 0;
 navLink();
 fetch(addrGet, { db: "sites_construction", parent_folder: parentFolder }, getFirstPages);
 _colors.click(colorsChange)

@@ -47,11 +47,6 @@ span[size="40"] { font-size: 40px; }
 	padding: 0 10px;
 	border: 1px solid #ccc;
 	background-color: #fff;
-
-	border-radius: 5px;
-    border: 2px solid #FF6885;
-    border-left: 10px solid #FF6885;
-    margin-top: 10px;
 }
 .container .icon-reorder {
 	float: right;
