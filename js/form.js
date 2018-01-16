@@ -50,6 +50,7 @@ var folderSystem = function (editColor, editIcon, name, kind, id) {
 	var DIV3 = document.createElement('div');
 	DIV3.className = "center_icon";
 	var A = document.createElement('a');
+	kind ? null : A.setAttribute("target", "_blank");
 	A.href = link;
 	A.className = "animate ui-state-default";
 	A.setAttribute("draggable", !kind);
