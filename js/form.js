@@ -262,7 +262,7 @@ _create.hover(function () {
 });
 _document.click(function(event){
 	if(!_createFolder.is(event.target) && _tip.has(event.target).length === 0 || _createLabel.is(event.target)){
-		_tip.hide(250);
+		_tip.hide(250); 
 	} else {
 		_tip.show(250);
 	}

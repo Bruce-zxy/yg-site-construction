@@ -497,12 +497,12 @@ $(document).ready(function() {
         console.log(layoutName);
         var date = new Date().getTime();
         var datas = {
-            name: layoutName,
-            content: $.base64.btoa(downloadLayoutSrc()[0]),
-            content_origin: $.base64.btoa(downloadLayoutSrc()[1]),
-            parent_folder: parentFolder,
-            create_time: date,
-            classify: 'color-'+Math.floor(Math.random()*6)+',icon-user'
+            Name: layoutName,
+            Content: $.base64.btoa(downloadLayoutSrc()[0]),
+            Content_Origin: $.base64.btoa(downloadLayoutSrc()[1]),
+            Parent_Folder: parentFolder,
+            CreatorTime: date,
+            Cassify: 'color-'+Math.floor(Math.random()*6)+',icon-user'
         }
         $.ajax({
             type: "post",
@@ -529,12 +529,12 @@ $(document).ready(function() {
         handleSaveLayout();
         var date = new Date().getTime();
         var datas = {
-            name: layoutName,
-            content: $.base64.btoa(downloadLayoutSrc()[0]),
-            content_origin: $.base64.btoa(downloadLayoutSrc()[1]),
-            parent_folder: parentFolder,
-            create_time: date,
-            classify: 'color-'+Math.floor(Math.random()*5 + 1)+',icon-user'
+            Name: layoutName,
+            Content: $.base64.btoa(downloadLayoutSrc()[0]),
+            Content_Origin: $.base64.btoa(downloadLayoutSrc()[1]),
+            Parent_Folder: parentFolder,
+            CreatorTime: date,
+            Classify: 'color-'+Math.floor(Math.random()*5 + 1)+',icon-user'
         }
         $.ajax({
             type: "post",
