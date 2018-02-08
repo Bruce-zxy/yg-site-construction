@@ -3,10 +3,9 @@
 $.base64.utf8encode = true;
 $.base64.utf8decode = true;
 
-var host = "192.168.1.77";
-var port = ":3000"
-var addrGet = "http://" + host + port +"/getAll";
-var addrSend = "http://" + host + port +"/createFolder";
+var addrGetAll = "http://117.169.87.75:8010/api/FilesSystem/GetListByParentFolderId";
+var addrCreate = "http://117.169.87.75:8010/api/FilesSystem/Add";
+
 var _createForm = $(".create_form");
 var _createFolder = $('.create_folder');
 var _createLabel = $(".tips .name label");
@@ -22,7 +21,7 @@ var editColor = _colors.parent().find(".icon-ok")[0].className.split(" ")[0];
 var editIcon = $(".icons ."+editColor)[0].className.split(" ")[0];
 var presentFolder = sessionStorage.getItem("presentFolder");
 var presentPath = sessionStorage.getItem("presentPath");
-var parentFolder = 0;
+var parentFolder = "";
 var pageSum = 0;
 var folderSum = 0;
 var firstLayerSort = [];
@@ -97,22 +96,21 @@ var createFolder = function () {
 	var folderName = _tip.find(".name input").val() || "未命名文件夹";
 	editColor = editColor.length > 7 ? editColor.slice(3) : editColor;
 	var datas = {
-		name: folderName,
-		classify: editColor + "," + editIcon,
-		create_time: new Date().getTime(),
-		type: "folder",
-		parent_folder: presentFolder,
-		action: "add",
+		Name: folderName,
+		Classify: editColor + "," + editIcon,
+		CreatorTime: new Date().getTime(),
+		Type: "folder",
+		// parent_folder: presentFolder,
+		Parent_Folder: presentFolder,
+		// action: "add",
 	};
 	$.ajax({
 	    type: "post",
-	    url: addrSend,
+	    url: addrCreate,
+	    headers: { Token: "4d22a809-4cbc-4dba-883f-89fad80318fa" },
 	    data: datas,
 	    success: function(data) {
-	    	console.log(data);
-	        // data = JSON.parse(data);
 	        if(typeof(data) === 'object'){
-	        	console.log(data);
 	        	$(".form_part").prepend(folderSystem(editColor, editIcon, folderName, true, data.id));
 	        	$(".form_folder a")[0].onclick = deepFolder;
 	        } else {
@@ -126,25 +124,28 @@ var createFolder = function () {
 	folderSum++;
 	updateClass();
 }
+
 // 储存某一页的表单
 // 统计某一页表单数量
-/**
- * [getNum description]
+/* [getNum description]
  * @Author   bruce_zxy
  * @DateTime 2017-12-01T10:55:41+0800
  * @version  [version]
  * @param    {Object}                 data     异步返回的数据数组
  * @param    {String}                 classify 文件夹还是页面
  * @return   {Number}                          返回对应的数量
- */
-var getNum = function (data, classify) {
-    traversingData(data.sort(byTime("create_time")));
+*/
+
+var getNum = function (data, kind) {
+    traversingData(data.sort(byTime("CreatorTime")), kind);
     return data.length;
 }
 // 遍历返回数组
-var traversingData = function (data) {
-    for (var i = 0; i < data.length; i++) 
-    	firstLayerSort.push(data[i]);
+var traversingData = function (data, kind) {
+    for (var i = 0; i < data.length; i++)
+    	if (data[i].Type === kind) {
+    		firstLayerSort.push(data[i]);
+    	}
 }
 // 数据按创建时间排序(小 -> 大)
 var byTime = function(name) {
@@ -167,11 +168,11 @@ var render = function (firstLayerSort) {
 	__i = 0;
     __len = firstLayerSort.length - 1;
     __t = setInterval(function () {
-    	__color = firstLayerSort[__i].classify.split(",")[0];
-    	__icon = firstLayerSort[__i].classify.split(",")[1];
-    	__classify = firstLayerSort[__i].type && firstLayerSort[__i].type === "folder" ? true : false;
-    	__name = firstLayerSort[__i].name;
-    	__id = firstLayerSort[__i++].id
+    	__color = firstLayerSort[__i].Classify.split(",")[0];
+    	__icon = firstLayerSort[__i].Classify.split(",")[1];
+    	__classify = firstLayerSort[__i].Type && firstLayerSort[__i].Type === "folder" ? true : false;
+    	__name = firstLayerSort[__i].Name;
+    	__id = firstLayerSort[__i++].Id
     	__state = __i > __len;
     	__state ? window.clearInterval(__t) : null;
     	$(".form_part").prepend(folderSystem(__color, __icon, __name, __classify, __id));
@@ -185,14 +186,15 @@ var renderOver = function (state) {
 }
 // 获取数据
 var fetch = function (url, data, func) {
-	var getFolder = data.parent_folder;
+	var getFolder = data.Parent_Folder;
 	$.ajax({
-	    type: "post",
+	    type: "POST",
 	    url: url,
+	    headers: { "Token": "4d22a809-4cbc-4dba-883f-89fad80318fa" },
 	    data: data,
 	    success: function(data) {
-	        // data = JSON.parse(data);
-	        typeof(data) === 'object' ? func ? func(data, data.length === 0, getFolder) : console.log(data) : alert('服务器返回参数错误或未找到数据！');
+	        console.log(data);
+	        typeof(data) === 'object' ? func ? func(data.Data, data.Data.length === 0, getFolder) : console.log(data.Data) : alert('服务器返回参数错误或未找到数据！');
 	    },
 	    error: function(a, b) {
 	        alert('向服务器请求数据失败！');
@@ -200,11 +202,11 @@ var fetch = function (url, data, func) {
 	});
 }
 var getFirstPages = function (data, dataNull, getFolder) {
-	pageSum = dataNull ? 0 : getNum(data, "page");
-	fetch(addrGet, { db: "files_system", parent_folder: getFolder }, getFirstFolders);
+	dataNull ? null : getNum(data, "page");
+	getFirstFolders(data, dataNull);
 }
 var getFirstFolders = function (data, dataNull) {
-	folderSum = dataNull ? 0 : getNum(data, "folder");
+	dataNull ? null : getNum(data, "folder");
 	$(".form_part").html("");
 	firstLayerSort.length ? render(firstLayerSort) : null;
 }
@@ -220,8 +222,8 @@ var deepFolder = function () {
 	_nav.parent().append('<span>><a href="javascript:;" data-folder="'+parentFolder+'">'+deepName+'</a></span>')
 	navLink();
 	presentFolder = parentFolder;
-	saveTemp(parentFolder, _nav);
-	fetch(addrGet, { db: "sites_construction", parent_folder: parentFolder }, getFirstPages);
+	// saveTemp(parentFolder, _nav);
+	fetch(addrGetAll, { "": parentFolder }, getFirstPages);
 }
 // 导航栏添加点击事件
 var navLink = function () {
@@ -229,9 +231,9 @@ var navLink = function () {
 		this.onclick = function () {
 			var folderNum = this.getAttribute("data-folder");
 			$(this).parent().nextAll().remove();
-			fetch(addrGet, { db: "sites_construction", parent_folder: folderNum }, getFirstPages);
+			fetch(addrGetAll, { Parent_Folder: folderNum }, getFirstPages);
 			presentFolder = folderNum;
-			saveTemp(folderNum, _nav);
+			// saveTemp(folderNum, _nav);
 		}
 	});
 }
@@ -251,7 +253,7 @@ var saveTemp = function (parentFolder, _nav) {
 parentFolder = presentFolder || parentFolder;
 presentPath !== "undefined" && presentPath ? _nav.html(presentPath) : 0;
 navLink();
-fetch(addrGet, { db: "sites_construction", parent_folder: parentFolder }, getFirstPages);
+fetch(addrGetAll, { Parent_Folder: parentFolder }, getFirstPages);
 _colors.click(colorsChange)
 _icons.click(iconsBG);
 _createForm.click(createForm);
@@ -267,5 +269,4 @@ _document.click(function(event){
 		_tip.show(250);
 	}
 });
-
 

@@ -3,10 +3,16 @@
 $.base64.utf8encode = true;
 $.base64.utf8decode = true;
 
-var host = "192.168.1.77";
-var port = ":3000"
+var host = "117.169.87.75";
+var port = ":8010"
 var address = "http://" + host + port + "/edit";
 var addressImg = "http://" + host + port + "/imgList";
+
+var addrAddPage = "http://117.169.87.75:8010/api/FilesSystem/Add";
+var addrGetImg = "http://117.169.87.75:8010/api/File/GetFileList";
+
+
+
 var url = location.search;
 var Request = new Object();
 var currentDocument = null;
@@ -16,7 +22,8 @@ var startdrag = 0;
 var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
-var parentFolder = 0;
+var parentFolder = "";
+var pageId = ""
 var imgList = [];
 
 
@@ -381,10 +388,11 @@ function redoLayout() {
 (function () {
     $.ajax({
         type: "post",
-        url: addressImg,
+        url: addrGetImg,
+        headers: { "Token": "4d22a809-4cbc-4dba-883f-89fad80318fa" },
         dataType:"json",
         success: function(data) {
-            imgs = data;
+            imgs = data.Data;
             console.log(imgs);
             var docfrag = document.createDocumentFragment();
             for (i in imgs) {
@@ -392,8 +400,8 @@ function redoLayout() {
                 LI1.className = "";
                 var A1 = document.createElement('a');
                 A1.href = "#";
-                A1.rel = "http://"+host+"/yg-site-construction/album/"+imgs[i].name;
-                A1.textContent = imgs[i].name;
+                A1.rel = imgs[i];
+                A1.textContent = imgs[i].split("/")[5];
                 LI1.appendChild(A1);
                 docfrag.appendChild(LI1);
                 $('ul[data-rol=img_click]').append(docfrag);
@@ -425,6 +433,35 @@ $(document).ready(function() {
     layoutName ? $(".mask").css("display", "none") : null;
     $(".saveLayoutName").click(function () {
         layoutName = $(this).prev().val();
+
+
+
+
+        var date = new Date().getTime();
+        var datas = {
+            Name: layoutName,
+            Parent_Folder: parentFolder,
+            CreatorTime: date,
+            Cassify: 'color-'+Math.floor(Math.random()*6)+',icon-user'
+        }
+        $.ajax({
+            type: "post",
+            url: address,
+            data: datas,
+            success: function(data) {
+                if(typeof(data) !== 'object') {
+                    alert('服务器返回参数错误！')
+                } else {
+                    console.log(data.Data);
+                }
+            },
+            error: function(a, b) {
+                alert('向服务器请求数据失败！');
+            }
+        });
+
+
+
         $(".mask").css("display", "none");
     })
     $("body").css("min-height", $(window).height() - 90);
