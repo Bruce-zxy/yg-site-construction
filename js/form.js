@@ -89,12 +89,13 @@ var iconsBG = function () {
 }
 // 创建新页面
 var createForm = function () {
-	window.location.href = "./edit.html?parent_folder="+parentFolder;
+	window.open("./edit.html?parent_folder="+parentFolder);
 }
 // 创建文件夹
 var createFolder = function () {
 	var folderName = _tip.find(".name input").val() || "未命名文件夹";
 	editColor = editColor.length > 7 ? editColor.slice(3) : editColor;
+	console.log(presentFolder);
 	var datas = {
 		Name: folderName,
 		Classify: editColor + "," + editIcon,
@@ -231,7 +232,8 @@ var navLink = function () {
 		this.onclick = function () {
 			var folderNum = this.getAttribute("data-folder");
 			$(this).parent().nextAll().remove();
-			fetch(addrGetAll, { Parent_Folder: folderNum }, getFirstPages);
+			console.log(folderNum);
+			fetch(addrGetAll, { "" : folderNum }, getFirstPages);
 			presentFolder = folderNum;
 			// saveTemp(folderNum, _nav);
 		}
