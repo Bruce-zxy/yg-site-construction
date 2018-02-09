@@ -2,6 +2,7 @@
 !window.atob ? window.atob = $.base64.atob : null
 $.base64.utf8encode = true;
 $.base64.utf8decode = true;
+window.load = false;
 
 var addrGetAll = "http://117.169.87.75:8010/api/FilesSystem/GetListByParentFolderId";
 var addrCreate = "http://117.169.87.75:8010/api/FilesSystem/Add";
@@ -39,7 +40,7 @@ var firstLayerSort = [];
 var folderSystem = function (editColor, editIcon, name, kind, id) {
 	var classify = kind ? "folder" : "page";
 	var content = kind ? "表单" : "数据";
-	var link = kind ? "javascript:;" : "./edit.html?name=" + name;
+	var link = kind ? "javascript:;" : "./edit.html?id=" + id;
 	editColor = editColor.length > 7 ? editColor.slice(3) : editColor;
 	var docfrag = document.createDocumentFragment();
 	var DIV1 = document.createElement('div');
@@ -112,7 +113,7 @@ var createFolder = function () {
 	    data: datas,
 	    success: function(data) {
 	        if(typeof(data) === 'object'){
-	        	$(".form_part").prepend(folderSystem(editColor, editIcon, folderName, true, data.id));
+	        	$(".form_part").prepend(folderSystem(editColor, editIcon, folderName, true, data.Data.Id));
 	        	$(".form_folder a")[0].onclick = deepFolder;
 	        } else {
 	        	alert('服务器返回参数错误！');
@@ -187,6 +188,7 @@ var renderOver = function (state) {
 }
 // 获取数据
 var fetch = function (url, data, func) {
+	window.load = true;
 	var getFolder = data.Parent_Folder;
 	$.ajax({
 	    type: "POST",
@@ -195,6 +197,7 @@ var fetch = function (url, data, func) {
 	    data: data,
 	    success: function(data) {
 	        console.log(data);
+	        window.load = false;
 	        typeof(data) === 'object' ? func ? func(data.Data, data.Data.length === 0, getFolder) : console.log(data.Data) : alert('服务器返回参数错误或未找到数据！');
 	    },
 	    error: function(a, b) {
@@ -271,4 +274,16 @@ _document.click(function(event){
 		_tip.show(250);
 	}
 });
+
+setInterval(function() {
+	if(window.load) {
+		$('.mask').css('display', 'block');
+		$('.mask').css('opacity', '1');
+	} else {
+		$('.mask').css('opacity', '0');
+		setTimeout(function() {
+			$('.mask').css('display', 'none');
+		}, 250)
+	}
+}, 16)
 

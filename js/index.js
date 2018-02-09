@@ -8,7 +8,10 @@ var port = ":8010"
 var address = "http://" + host + port + "/edit";
 var addressImg = "http://" + host + port + "/imgList";
 
-var addrAddPage = "http://117.169.87.75:8010/api/FilesSystem/Add";
+var addrAddPage = "http://117.169.87.75:8010/api/FilesSystem/Add"
+var addrAddContent = "http://117.169.87.75:8010/api/SitesConstruction/Add";
+var addrGetContent = "http://117.169.87.75:8010/api/SitesConstruction/GetDetailParent_Folder";
+var addrUpdateContent = "http://117.169.87.75:8010/api/SitesConstruction/Update";
 var addrGetImg = "http://117.169.87.75:8010/api/File/GetFileList";
 
 
@@ -22,6 +25,7 @@ var startdrag = 0;
 var demoHtml = $(".demo").html();
 var currenteditor = null;
 var layoutName = null;
+var layoutId = "";
 var parentFolder = "";
 var pageId = ""
 var imgList = [];
@@ -35,9 +39,9 @@ var imgList = [];
             Request[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);　　
         }
     }
-    if(Request["name"]) {
-        layoutName = Request["name"];
-        getContent(layoutName);
+    if(Request["id"]) {
+        layoutId = Request["id"];
+        getContent(layoutId);
     }
     if(Request["parent_folder"]) {
         parentFolder = Request["parent_folder"];
@@ -46,15 +50,16 @@ var imgList = [];
 function getContent(pageName) {
     $.ajax({
         type: "post",
-        url: address,
-        data: { name: pageName },
+        url: addrGetContent,
+        headers: { "Token": "4d22a809-4cbc-4dba-883f-89fad80318fa" },
+        data: { Id: layoutId },
         success: function(data) {
             if(typeof(data) !== 'object') {
                 alert('服务器返回参数错误！')
             } else {
                 console.log('打开页面获取的内容：');
                 console.log(data);
-                $(".demo").html($.base64.atob(data[0].content_origin));
+                $(".demo").html($.base64.atob(data.Data.Content_Origin));
                 initContainer();
                 imgClick();
             }
@@ -418,7 +423,6 @@ function redoLayout() {
 function imgClick() {
     $('ul[data-rol=img_click] li a').click(function () {
         $(this).parent().parent().parent().parent().parent().find('img').attr('src', this.getAttribute("rel"));
-        console.log($(this).parent().parent().parent().parent().parent().find('img').attr('src'));
     });
 }
 
@@ -430,38 +434,57 @@ $(document).ready(function() {
         contentsCss: ['css/bootstrap-combined.min.css'],
         allowedContent: true
     });
-    layoutName ? $(".mask").css("display", "none") : null;
+    layoutId ? $(".mask").css("display", "none") : null;
     $(".saveLayoutName").click(function () {
         layoutName = $(this).prev().val();
-
-
-
-
         var date = new Date().getTime();
         var datas = {
             Name: layoutName,
+            Type: "page",
             Parent_Folder: parentFolder,
             CreatorTime: date,
-            Cassify: 'color-'+Math.floor(Math.random()*6)+',icon-user'
+            Classify: 'color-'+Math.floor(Math.random()*6)+',icon-user'
         }
         $.ajax({
-            type: "post",
-            url: address,
-            data: datas,
+            type: "POST",
+            headers: { "Token": "4d22a809-4cbc-4dba-883f-89fad80318fa", "Content-Type": "application/json" },
+            url: addrAddContent,
+            data: JSON.stringify(datas),
             success: function(data) {
                 if(typeof(data) !== 'object') {
                     alert('服务器返回参数错误！')
                 } else {
-                    console.log(data.Data);
+                    layoutId = data.Data;
+                    $.ajax({
+                        type: "POST",
+                        headers: { "Token": "4d22a809-4cbc-4dba-883f-89fad80318fa", "Content-Type": "application/json" },
+                        url: addrAddPage,
+                        data: JSON.stringify({
+                            Name: layoutName,
+                            Type: "page",
+                            id: layoutId,
+                            Parent_Folder: parentFolder,
+                            CreatorTime: date,
+                            Classify: 'color-'+Math.floor(Math.random()*6)+',icon-user'
+                        }),
+                        success: function(data) {
+                            if(typeof(data) !== 'object') {
+                                alert('服务器返回参数错误！')
+                            } else {
+                                layoutId = data.Data;
+                                console.log(data);
+                            }
+                        },
+                        error: function(a, b) {
+                            alert('向服务器请求数据失败！');
+                        }
+                    });
                 }
             },
             error: function(a, b) {
                 alert('向服务器请求数据失败！');
             }
         });
-
-
-
         $(".mask").css("display", "none");
     })
     $("body").css("min-height", $(window).height() - 90);
@@ -537,14 +560,17 @@ $(document).ready(function() {
             Name: layoutName,
             Content: $.base64.btoa(downloadLayoutSrc()[0]),
             Content_Origin: $.base64.btoa(downloadLayoutSrc()[1]),
+            Id: layoutId,
             Parent_Folder: parentFolder,
             CreatorTime: date,
-            Cassify: 'color-'+Math.floor(Math.random()*6)+',icon-user'
+            Classify: 'color-'+Math.floor(Math.random()*6)+',icon-user'
         }
+        console.log(datas);
         $.ajax({
             type: "post",
-            url: address,
+            url: addrUpdateContent,
             data: datas,
+            headers: { "Token": "4d22a809-4cbc-4dba-883f-89fad80318fa" },            
             success: function(data) {
                 if(typeof(data) !== 'object') {
                     alert('服务器返回参数错误！')
@@ -567,6 +593,7 @@ $(document).ready(function() {
         var date = new Date().getTime();
         var datas = {
             Name: layoutName,
+            Id: layoutId,
             Content: $.base64.btoa(downloadLayoutSrc()[0]),
             Content_Origin: $.base64.btoa(downloadLayoutSrc()[1]),
             Parent_Folder: parentFolder,
@@ -575,8 +602,8 @@ $(document).ready(function() {
         }
         $.ajax({
             type: "post",
-            url: address,
-            data: datas,
+            headers: { "Token": "4d22a809-4cbc-4dba-883f-89fad80318fa", "Content-Type": "application/json" },            url: addrUpdateContent,
+            data: JSON.stringify(datas),
             success: function(data) {
                 if(typeof(data) !== 'object') {
                     alert('服务器返回参数错误！')
